@@ -47,7 +47,7 @@ public class PanelGraph extends javax.swing.JPanel {
 
     private JFreeChart createChart(final XYDataset dataset) {
         final JFreeChart result = ChartFactory.createTimeSeriesChart(
-            "Какой-то параметр",
+            null,
             "Время",
             "Пока неясно",
             dataset,

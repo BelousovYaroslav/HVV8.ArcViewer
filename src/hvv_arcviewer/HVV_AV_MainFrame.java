@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import org.apache.log4j.Logger;
 import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
@@ -53,18 +54,18 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         
         initComponents();
         theApp = app;
-        setTitle( "Модуль просмотра архивных данных, v.1.0.0.0 (2017.06.15 16:20), (C) ФЛАВТ 2017.");
+        setTitle( "Модуль просмотра архивных данных, v.1.0.0.0 (2017.06.29 17:15), (C) ФЛАВТ 2017.");
         m_gdtmStartDate = ( GregorianCalendar) Calendar.getInstance();
         m_gdtmStopDate = ( GregorianCalendar) m_gdtmStartDate.clone();
         m_gdtmStopDate.add( Calendar.DAY_OF_MONTH, -1);
         m_gdtmStopDate.add( Calendar.HOUR, 2);
         
-        m_gdtmStartDate.set( Calendar.DAY_OF_MONTH, 3);
-        m_gdtmStartDate.set( Calendar.MONTH, Calendar.SEPTEMBER);
+        m_gdtmStartDate.set( Calendar.DAY_OF_MONTH, 27);
+        m_gdtmStartDate.set( Calendar.MONTH, Calendar.DECEMBER);
         m_gdtmStartDate.set( Calendar.YEAR, 2016);
         
-        m_gdtmStopDate.set( Calendar.DAY_OF_MONTH, 3);
-        m_gdtmStopDate.set( Calendar.MONTH, Calendar.SEPTEMBER);
+        m_gdtmStopDate.set( Calendar.DAY_OF_MONTH, 28);
+        m_gdtmStopDate.set( Calendar.MONTH, Calendar.DECEMBER);
         m_gdtmStopDate.set( Calendar.YEAR, 2016);
         
         updateDate();
@@ -499,109 +500,215 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         m_gdtmStopDate.add( Calendar.MINUTE, -1 * evt.getWheelRotation());
         updateDate();
     }//GEN-LAST:event_lblStopMinutesMouseWheelMoved
-
+   
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        //theApp.series_g1.add(new Millisecond(), 100. + Math.random() * 15.);
-        //return;
+        btnRefresh.setEnabled( false);
+        btnExit.setEnabled( false);
         
         theApp.series_g1.clear();
-
-        GregorianCalendar gdt = (GregorianCalendar) m_gdtmStartDate.clone();
+        theApp.series_g2.clear();
+        theApp.series_g3.clear();
+        theApp.series_g4.clear();
+        
         boolean bRunningDates = true;
         
-        int nCounter = 0;
-        do {    
-            String strFilename =  theApp.GetAMSRoot() + "/data/" + gdt.get( Calendar.YEAR);
-
-            int nMonth = gdt.get( Calendar.MONTH) + 1;
-            if( nMonth < 10)
-                strFilename += ".0" + nMonth;
-            else
-                strFilename += "." + nMonth;
-            
-            int nDay = gdt.get( Calendar.DAY_OF_MONTH);
-            if( nDay < 10)
-                strFilename += ".0" + nDay;
-            else
-                strFilename += "." + nDay;
-            
-            cmbGraph1.getSelectedIndex();
-            int nIndex = cmbGraph1.getSelectedIndex();
-            String strSelection = ( String) cmbGraph1.getModel().getElementAt(nIndex);
-            
-            int nPoint1 = strSelection.indexOf( ".", 0);
-            int nPoint2 = strSelection.indexOf( ".", nPoint1+1);
-            int nPoint3 = strSelection.indexOf( ".", nPoint2+1);
-            
-            if( Character.isDigit( strSelection.charAt( 0)) == true) {
-                //VAC.param
-                strFilename += ".VAC";
-                strFilename += "." + strSelection.substring( 0, nPoint1);
-                strFilename += "." + strSelection.substring( nPoint2 + 1, nPoint3);
-            }
-            else {
-                //HV.param
-                strFilename += ".HV";
-                strFilename += "." + strSelection.substring( 0, nPoint1);
-                strFilename += "." + strSelection.substring( nPoint2 + 1, nPoint3);
-            }
-            
-            strFilename += ".csv";
-            
-            logger.info( strFilename);
-            //check if file exists
+        long lMillisDuration = m_gdtmStopDate.getTimeInMillis() - m_gdtmStartDate.getTimeInMillis();
+        double dblRunningTimeStepMillis = 0;
+        if( lMillisDuration > 1000000)
+            dblRunningTimeStepMillis = ( double) lMillisDuration / 1000.;
         
-        
-            TimeSeries seria = new TimeSeries( "G1",  Millisecond.class);
+        for( int nGraph=0; nGraph<4; nGraph++) {
+            if( nGraph == 1 && pnlGraph2.isVisible() == false) continue;
+            if( nGraph == 2 && pnlGraph3.isVisible() == false) continue;
+            if( nGraph == 3 && pnlGraph4.isVisible() == false) continue;
+            
+            SimpleDateFormat df = new SimpleDateFormat( "dd.MM.yyyy HH:mm:ss.SSS");
+            GregorianCalendar gdt = (GregorianCalendar) m_gdtmStartDate.clone();
+            logger.info( "STARTING gdt=" + df.format( gdt.getTime()));
+            
+            TimeSeries seria;
+            switch( nGraph) {
+                case 0:     seria = new TimeSeries( "G1",  Millisecond.class); break;
+                case 1:     seria = new TimeSeries( "G2",  Millisecond.class); break;
+                case 2:     seria = new TimeSeries( "G3",  Millisecond.class); break;
+                case 3:     seria = new TimeSeries( "G4",  Millisecond.class); break;
+                default:    seria = new TimeSeries( "G1",  Millisecond.class); break;
+            }
 
-            FileInputStream fin = null;
-            try {
-                fin = new FileInputStream( strFilename);
-                fin.close();
+            bRunningDates = true;
+            do {    
+                String strFilename =  theApp.GetAMSRoot() + "/data/" + gdt.get( Calendar.YEAR);
 
-                BufferedReader br = new BufferedReader( new FileReader( strFilename));
-                String line;
-                while ( ( line = br.readLine()) != null) {
-                    int indx1 = line.indexOf( ';');
-                    String strDate = line.substring( 0, indx1);
+                int nMonth = gdt.get( Calendar.MONTH) + 1;
+                if( nMonth < 10)
+                    strFilename += ".0" + nMonth;
+                else
+                    strFilename += "." + nMonth;
 
-                    String strValue = line.substring( indx1+1);
-                    strValue = strValue.substring( 0, strValue.length()-1);
+                int nDay = gdt.get( Calendar.DAY_OF_MONTH);
+                if( nDay < 10)
+                    strFilename += ".0" + nDay;
+                else
+                    strFilename += "." + nDay;
 
-                    double dblValue = Double.parseDouble( strValue);
-                    //logger.info( "strDate='" + strDate + "'");
-                    //logger.info( "strValue='" + strValue + "'");
-
-                    SimpleDateFormat df = new SimpleDateFormat( "dd.MM.yyyy HH:mm:ss.SSS");
-                    Date dt = df.parse( strDate);
-
-                    seria.addOrUpdate( new Millisecond(dt), dblValue);
-                    if( ++nCounter > 3000) break;
-                    
+                JComboBox cmb;
+                switch( nGraph) {
+                    case 0:     cmb = cmbGraph1; break;
+                    case 1:     cmb = cmbGraph2; break;
+                    case 2:     cmb = cmbGraph3; break;
+                    case 3:     cmb = cmbGraph4; break;
+                    default:    cmb = cmbGraph1; break;
                 }
 
-                theApp.series_g1.addAndOrUpdate(seria);
+                int nIndex = cmb.getSelectedIndex();
+                String strSelection = ( String) cmb.getModel().getElementAt(nIndex);
 
+                int nPoint1 = strSelection.indexOf( ".", 0);
+                int nPoint2 = strSelection.indexOf( ".", nPoint1+1);
+                int nPoint3 = strSelection.indexOf( ".", nPoint2+1);
+                int nPoint4 = strSelection.indexOf( ".", nPoint3+1);
+
+                if( Character.isDigit( strSelection.charAt( 0)) == true) {
+                    //VAC.param
+                    strFilename += ".VAC";
+                    strFilename += "." + strSelection.substring( 0, nPoint1);
+                    strFilename += "." + strSelection.substring( nPoint2 + 1, nPoint3);
+                }
+                else {
+                    //HV.param
+                    strFilename += ".HV";
+                    strFilename += "." + strSelection.substring( 0, nPoint1);
+                    strFilename += "." + strSelection.substring( nPoint3 + 1, nPoint4);
+                }
+
+                strFilename += ".csv";
+
+                logger.info( strFilename);
+                //check if file exists
+
+
+
+                long lRunningDate = m_gdtmStartDate.getTimeInMillis() + ( long) dblRunningTimeStepMillis;
+
+                FileInputStream fin = null;
+                try {
+                    fin = new FileInputStream( strFilename);
+                    fin.close();
+
+                    //файл 1
+                    BufferedReader br = new BufferedReader( new FileReader( strFilename));
+
+                    //вот тут если не получится - надо раззиповывать!
+
+                    String strLine;
+                    double dblSumm = 0.;
+                    int nC = 0;
+
+                    //и пока читаются строки из файла, читаем
+                    while ( ( strLine = br.readLine()) != null) {
+
+                        //ищем разделитель
+                        int indx1 = strLine.indexOf( ';');
+
+                        //раздербаниваем - откусываем дату
+                        String strDate = strLine.substring( 0, indx1);
+                        Date dt = df.parse( strDate);
+
+                        if( dt.after( m_gdtmStopDate.getTime())) {
+                            logger.info( "OVER");
+                            break;
+                        }
+
+                        if( dt.after( m_gdtmStartDate.getTime())) {
+                            //раздербаниваем дальше - откусываем значение
+                            String strValue = strLine.substring( indx1+1);
+                            strValue = strValue.substring( 0, strValue.length()-1);
+                            double dblValue = Double.parseDouble( strValue);
+
+                            //logger.info( "line='" + strLine + "'");
+                            //logger.info( "strDate='" + strDate + "'");
+                            //logger.info( "strValue='" + strValue + "'");
+
+                            dblSumm += dblValue;
+                            nC++;
+
+                            if( dblRunningTimeStepMillis > 0.) {
+                                //добавляем в сумматор для среднего
+                                if( dt.getTime() > lRunningDate) {
+                                    double val = dblSumm / ( double) nC;
+                                    
+                                    //logger.info( "GRAPH" + nGraph + " ADDING (" + val+ ")!");
+                                    lRunningDate += ( long) dblRunningTimeStepMillis;
+                                    
+                                    seria.addOrUpdate( new Millisecond(dt), val);
+                                    dblSumm = 0.; nC = 0;
+
+                                }
+                            }
+                            else {
+                                //добавляем в серию наживую 
+                                //logger.info( "GRAPH" + nGraph + " ADDING 1:1!");
+                                seria.addOrUpdate( new Millisecond(dt), dblValue);
+                            }
+                        }
+
+                    }
+
+
+
+                }
+                catch( ParseException ex) {
+                    logger.error( "ParseException caught!", ex);
+                }
+                catch( FileNotFoundException ex) {
+                    logger.error( "FileNotFoundException caught!", ex);
+                }
+                catch( IOException ex) {
+                    logger.error( "IOException caught!", ex);
+                }
+                //catch( CloneNotSupportedException ex) {
+                //    logger.error( "CloneNotSupportedException caught!", ex);
+                //}
+
+                //файл от текущего дня закончился - перейдём к следующему
+                gdt.add( Calendar.DAY_OF_MONTH, 1);
+                gdt.set( Calendar.HOUR_OF_DAY, 0);
+                gdt.set( Calendar.MINUTE, 0);
+                
+                
+                logger.info( "gdt=" + df.format( gdt.getTime()));
+                logger.info( "m_gdtmStopDate=" + df.format( m_gdtmStopDate.getTime()));
+                logger.info( "gdt.after( m_gdtmStopDate)=" + gdt.after( m_gdtmStopDate));
+                logger.info( "***");
+                if( gdt.after( m_gdtmStopDate))
+                    bRunningDates = false;
+
+                if( bRunningDates)
+                    logger.info( "Next day");
+                else
+                    logger.info( "Stops");
+                
+                //break;
+
+            } while( bRunningDates);
+
+            logger.info( "starting redraw" + nGraph);
+            switch( nGraph) {
+                case 0: theApp.series_g1.addAndOrUpdate( seria); break;
+                case 1: theApp.series_g2.addAndOrUpdate( seria); break;
+                case 2: theApp.series_g3.addAndOrUpdate( seria); break;
+                case 3: theApp.series_g4.addAndOrUpdate( seria); break;
+                default: theApp.series_g1.addAndOrUpdate( seria); break;
             }
-            catch( ParseException ex) {
-                logger.error( "ParseException caught!", ex);
-            }
-            catch( FileNotFoundException ex) {
-                logger.error( "FileNotFoundException caught!");//, ex);
-            }
-            catch( IOException ex) {
-                logger.error( "IOException caught!", ex);
-            }
-            //catch( CloneNotSupportedException ex) {
-            //    logger.error( "CloneNotSupportedException caught!", ex);
-            //}
-            
-            gdt.add( Calendar.DAY_OF_MONTH, 1);
-            if( gdt.after( m_gdtmStopDate))
-                bRunningDates = false;
-            
-        } while( bRunningDates);
+            logger.info( "go to next graph");
+        }
         
+        
+        btnRefresh.setEnabled( true);
+        btnExit.setEnabled( true);
+        
+        logger.info( "out");
+            
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnLayout1x1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLayout1x1ActionPerformed
@@ -667,6 +774,10 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
                             m_gdtmStartDate.get( Calendar.MINUTE));
         
         
+        if( m_gdtmStopDate.before( m_gdtmStartDate)) {
+            m_gdtmStopDate = ( GregorianCalendar) m_gdtmStartDate.clone();
+            m_gdtmStopDate.add( Calendar.MINUTE, 1);
+        }
         
         lblStopDay.setText( ( m_gdtmStopDate.get( Calendar.DAY_OF_MONTH) < 10 ? "0" : "") +
                         m_gdtmStopDate.get( Calendar.DAY_OF_MONTH));
