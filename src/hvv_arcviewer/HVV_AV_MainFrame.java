@@ -4,8 +4,10 @@ import hvv_devices.HVV_HvDevices;
 import hvv_devices.HVV_VacuumDevice;
 import hvv_devices.HVV_VacuumDevices;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
@@ -13,6 +15,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import org.apache.log4j.Logger;
@@ -551,6 +555,8 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
                 else
                     strFilename += "." + nDay;
 
+                String strZipFilename = strFilename + ".zip";
+                        
                 JComboBox cmb;
                 switch( nGraph) {
                     case 0:     cmb = cmbGraph1; break;
@@ -583,8 +589,99 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
 
                 strFilename += ".csv";
 
-                logger.info( strFilename);
+                logger.info( "CSV file: '" + strFilename + "'");
+                logger.info( "ZIP file: '" + strZipFilename + "'");
+                
                 //check if file exists
+                File f = new File( strFilename);
+                if( f.exists() == false) { 
+                    
+                    //check if ZIP File exists
+                    f = new File( strZipFilename);
+                    if( f.exists()) {
+                        String outputFolder = theApp.GetAMSRoot() + "/data";
+                        byte[] buffer = new byte[1024];
+                        
+                        try {
+
+                            /*
+                            //create output directory is not exists
+                            File folder = new File(OUTPUT_FOLDER);
+                            if(!folder.exists()){
+                                    folder.mkdir();
+                            }
+                            */
+
+                            //get the zip file content
+                            ZipInputStream zis =
+                                new ZipInputStream(new FileInputStream( strZipFilename));
+                            
+                            //get the zipped file list entry
+                            ZipEntry ze = zis.getNextEntry();
+                            while( ze != null) {
+                                
+                                String fileName = ze.getName();
+                                File newFile = new File(outputFolder + File.separator + fileName);
+                                logger.info("UNZIPPING '" + strZipFilename + "': file: "+ newFile.getAbsoluteFile());
+
+                                //create all non exists folders
+                                //else you will hit FileNotFoundException for compressed folder
+                                new File( newFile.getParent()).mkdirs();
+
+                                FileOutputStream fos = new FileOutputStream(newFile);
+                                int len;
+                                while( ( len = zis.read( buffer)) > 0) {
+                                    fos.write( buffer, 0, len);
+                                }
+
+                                fos.close();
+                                ze = zis.getNextEntry();
+                            }
+
+                            zis.closeEntry();
+                            zis.close();
+
+                            logger.info("UNZIPPING Done");
+                            
+                            logger.info("Removing ZIP-file");
+                            f.delete();
+                            
+                        } catch( IOException ex) {
+                            logger.error( "IOExceiption caught:", ex);
+                        }
+                        
+                        
+                    }
+                    else {
+                        logger.warn( "ZIP file is also absent. Skipping the date");
+                        
+                        //файл от текущего дня не найден - перейдём к следующему
+                        gdt.add( Calendar.DAY_OF_MONTH, 1);
+                        gdt.set( Calendar.HOUR_OF_DAY, 0);
+                        gdt.set( Calendar.MINUTE, 0);
+
+
+                        logger.info( "gdt=" + df.format( gdt.getTime()));
+                        logger.info( "m_gdtmStopDate=" + df.format( m_gdtmStopDate.getTime()));
+                        logger.info( "gdt.after( m_gdtmStopDate)=" + gdt.after( m_gdtmStopDate));
+                        logger.info( "***");
+                        if( gdt.after( m_gdtmStopDate))
+                            bRunningDates = false;
+
+                        if( bRunningDates) {
+                            logger.info( "Next day");
+                            continue;
+                        }
+                        else {
+                            logger.info( "Stops");
+                            break;
+                        }
+                    }
+                    
+                }
+
+                //File fl = new File( strFilename);
+                //ZipInputStream zis;
 
 
 
@@ -597,8 +694,6 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
 
                     //файл 1
                     BufferedReader br = new BufferedReader( new FileReader( strFilename));
-
-                    //вот тут если не получится - надо раззиповывать!
 
                     String strLine;
                     double dblSumm = 0.;

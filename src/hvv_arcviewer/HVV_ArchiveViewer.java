@@ -51,10 +51,10 @@ public class HVV_ArchiveViewer {
         
         //ПРОВЕРКА ОДНОВРЕМЕННОГО ЗАПУСКА ТОЛЬКО ОДНОЙ КОПИИ ПРОГРАММЫ
         try {
-            m_pSingleInstanceSocketServer = new ServerSocket( GetSettings().GetSingleInstanceSocketServerPort());
+            m_pSingleInstanceSocketServer = new ServerSocket( m_pSettings.GetSingleInstanceSocketServerPort());
         }
         catch( Exception ex) {
-            MessageBoxError( "Модуль сбора данных уже запущен.\nПоищите на других \"экранах\".", "Модуль сбора данных");
+            MessageBoxError( "Модуль просмотра архивных данных уже запущен.\nПоищите на других \"экранах\".", "Модуль просмотра архивных данных");
             logger.error( "Не смогли открыть сокет для проверки запуска только одной копии программы! Программа уже запущена?", ex);
             m_pSingleInstanceSocketServer = null;
             m_pResources = null;
@@ -128,9 +128,11 @@ public class HVV_ArchiveViewer {
         else
             PropertyConfigurator.configure( file.getAbsolutePath());
         
-        new HVV_ArchiveViewer().start();
-        
-        logger.info( "ArcViewerApp::main(): in. Start point!");
+        HVV_ArchiveViewer appInstance = new HVV_ArchiveViewer();
+        if( appInstance.m_pSingleInstanceSocketServer != null) {
+            logger.info( "ArcViewerApp::main(): Start point!");
+            appInstance.start();
+        }
     }
     
     /**

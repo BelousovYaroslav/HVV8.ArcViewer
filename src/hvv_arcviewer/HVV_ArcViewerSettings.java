@@ -25,7 +25,7 @@ public class HVV_ArcViewerSettings {
     public int GetSingleInstanceSocketServerPort() { return m_nSingleInstanceSocketServerPort;}
     
     public HVV_ArcViewerSettings( String strAMSRoot) {
-        m_nSingleInstanceSocketServerPort = 10000;
+        m_nSingleInstanceSocketServerPort = 10005;
         
         ReadSettings();
     }
@@ -50,7 +50,7 @@ public class HVV_ArcViewerSettings {
                 
                 //logger.debug( "Pairs: [" + name + " : " + value + "]");
                 
-                if( "singlePort".equals( name)) m_nSingleInstanceSocketServerPort = Integer.parseInt( value);
+                if( "singleInstancePort".equals( name)) m_nSingleInstanceSocketServerPort = Integer.parseInt( value);
                 
                 //if( "timezone".equals( name)) m_nTimeZoneShift = Integer.parseInt( value);
             }
