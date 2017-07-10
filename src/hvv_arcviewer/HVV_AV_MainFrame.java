@@ -10,11 +10,16 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import javax.swing.DefaultComboBoxModel;
@@ -542,21 +547,32 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
             bRunningDates = true;
             do {    
                 String strFilename =  theApp.GetAMSRoot() + "/data/" + gdt.get( Calendar.YEAR);
+                String strMonthpackedDirectoryZipFile = theApp.GetAMSRoot() + "/data/" + gdt.get( Calendar.YEAR);
 
                 int nMonth = gdt.get( Calendar.MONTH) + 1;
-                if( nMonth < 10)
+                if( nMonth < 10) {
                     strFilename += ".0" + nMonth;
-                else
+                    strMonthpackedDirectoryZipFile += ".0" + nMonth + "/" + gdt.get( Calendar.YEAR) + ".0" + nMonth;
+                }
+                else {
                     strFilename += "." + nMonth;
-
+                    strMonthpackedDirectoryZipFile += "." + nMonth + "/" + gdt.get( Calendar.YEAR) + "." + nMonth;
+                }
+                
                 int nDay = gdt.get( Calendar.DAY_OF_MONTH);
-                if( nDay < 10)
+                if( nDay < 10) {
                     strFilename += ".0" + nDay;
-                else
+                    strMonthpackedDirectoryZipFile += ".0" + nDay;
+                }
+                else {
                     strFilename += "." + nDay;
-
+                    strMonthpackedDirectoryZipFile += "." + nDay;
+                }
+                
+                strMonthpackedDirectoryZipFile += ".zip";
                 String strZipFilename = strFilename + ".zip";
-                        
+                
+                
                 JComboBox cmb;
                 switch( nGraph) {
                     case 0:     cmb = cmbGraph1; break;
@@ -591,6 +607,7 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
 
                 logger.info( "CSV file: '" + strFilename + "'");
                 logger.info( "ZIP file: '" + strZipFilename + "'");
+                logger.info( "ZIP folder-packed-file: '" + strMonthpackedDirectoryZipFile + "'");
                 
                 //check if file exists
                 File f = new File( strFilename);
@@ -598,6 +615,24 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
                     
                     //check if ZIP File exists
                     f = new File( strZipFilename);
+                    
+                    if( !f.exists()) {
+                        //давайте попробуем вытащить архив из папки архивов под нзаванием "ГОД.МЕСЯЦ"
+                        File f_arcFolded = new File( strMonthpackedDirectoryZipFile);
+                        if( f_arcFolded.exists()) {
+                            Path src = FileSystems.getDefault().getPath( strMonthpackedDirectoryZipFile);
+                            Path dst = FileSystems.getDefault().getPath( strZipFilename);
+                            try {
+                                Files.move( src, dst, REPLACE_EXISTING);
+                            } catch( IOException ex) {
+                                logger.error( "IOException caught!", ex);
+                            }
+                        }
+                        
+                        //check again if ZIP File exists ;)
+                        f = new File( strZipFilename);
+                    }
+                    
                     if( f.exists()) {
                         String outputFolder = theApp.GetAMSRoot() + "/data";
                         byte[] buffer = new byte[1024];
