@@ -1,5 +1,6 @@
 package hvv_arcviewer;
 
+import hvv_devices.HVV_HvDevice;
 import hvv_devices.HVV_HvDevices;
 import hvv_devices.HVV_VacuumDevice;
 import hvv_devices.HVV_VacuumDevices;
@@ -526,7 +527,10 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         if( lMillisDuration > 1000000)
             dblRunningTimeStepMillis = ( double) lMillisDuration / 1000.;
         
+        String strAxisLabel;
         for( int nGraph=0; nGraph<4; nGraph++) {
+            strAxisLabel = "";
+        
             if( nGraph == 1 && pnlGraph2.isVisible() == false) continue;
             if( nGraph == 2 && pnlGraph3.isVisible() == false) continue;
             if( nGraph == 3 && pnlGraph4.isVisible() == false) continue;
@@ -544,6 +548,7 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
                 default:    seria = new TimeSeries( "G1",  Millisecond.class); break;
             }
 
+            
             bRunningDates = true;
             do {    
                 String strFilename =  theApp.GetAMSRoot() + "/data/" + gdt.get( Calendar.YEAR);
@@ -595,12 +600,18 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
                     strFilename += ".VAC";
                     strFilename += "." + strSelection.substring( 0, nPoint1);
                     strFilename += "." + strSelection.substring( nPoint2 + 1, nPoint3);
+                    
+                    HVV_VacuumDevice dev = ( HVV_VacuumDevice) HVV_VacuumDevices.getInstance().m_devices.get( strSelection.substring( 0, nPoint1));
+                    strAxisLabel = ( String) dev.m_mapParametersUnits.get( strSelection.substring( nPoint2 + 1, nPoint3));
                 }
                 else {
                     //HV.param
                     strFilename += ".HV";
                     strFilename += "." + strSelection.substring( 0, nPoint1);
                     strFilename += "." + strSelection.substring( nPoint3 + 1, nPoint4);
+                    
+                    HVV_HvDevice dev = ( HVV_HvDevice) HVV_VacuumDevices.getInstance().m_devices.get( strSelection.substring( 0, nPoint1));
+                    strAxisLabel = ( String) dev.m_mapParametersUnits.get( strSelection.substring( nPoint2 + 1, nPoint3));
                 }
 
                 strFilename += ".csv";
@@ -824,11 +835,30 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
 
             logger.info( "starting redraw" + nGraph);
             switch( nGraph) {
-                case 0: theApp.series_g1.addAndOrUpdate( seria); break;
-                case 1: theApp.series_g2.addAndOrUpdate( seria); break;
-                case 2: theApp.series_g3.addAndOrUpdate( seria); break;
-                case 3: theApp.series_g4.addAndOrUpdate( seria); break;
-                default: theApp.series_g1.addAndOrUpdate( seria); break;
+                case 0:
+                    theApp.series_g1.addAndOrUpdate( seria);
+                    m_panelGraph1.m_chart.getXYPlot().getRangeAxis().setLabel( strAxisLabel);
+                break;
+                    
+                case 1:
+                    theApp.series_g2.addAndOrUpdate( seria);
+                    m_panelGraph2.m_chart.getXYPlot().getRangeAxis().setLabel( strAxisLabel);
+                break;
+                    
+                case 2:
+                    theApp.series_g3.addAndOrUpdate( seria);
+                    m_panelGraph3.m_chart.getXYPlot().getRangeAxis().setLabel( strAxisLabel);
+                break;
+                    
+                case 3:
+                    theApp.series_g4.addAndOrUpdate( seria);
+                    m_panelGraph4.m_chart.getXYPlot().getRangeAxis().setLabel( strAxisLabel);
+                break;
+                    
+                default:
+                    theApp.series_g1.addAndOrUpdate( seria);
+                    m_panelGraph1.m_chart.getXYPlot().getRangeAxis().setLabel( strAxisLabel);
+                break;
             }
             logger.info( "go to next graph");
         }
