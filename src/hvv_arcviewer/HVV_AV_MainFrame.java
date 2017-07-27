@@ -64,19 +64,19 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         
         initComponents();
         theApp = app;
-        setTitle( "Модуль просмотра архивных данных, v.1.0.0.0 (2017.06.29 17:15), (C) ФЛАВТ 2017.");
+        setTitle( "Модуль просмотра архивных данных, v.1.0.0.0 (2017.07.27 11:25), (C) ФЛАВТ 2017.");
         m_gdtmStartDate = ( GregorianCalendar) Calendar.getInstance();
         m_gdtmStopDate = ( GregorianCalendar) m_gdtmStartDate.clone();
         m_gdtmStopDate.add( Calendar.DAY_OF_MONTH, -1);
         m_gdtmStopDate.add( Calendar.HOUR, 2);
         
-        m_gdtmStartDate.set( Calendar.DAY_OF_MONTH, 27);
-        m_gdtmStartDate.set( Calendar.MONTH, Calendar.DECEMBER);
-        m_gdtmStartDate.set( Calendar.YEAR, 2016);
+        m_gdtmStartDate.set( Calendar.DAY_OF_MONTH, 06);
+        m_gdtmStartDate.set( Calendar.MONTH, Calendar.JUNE);
+        m_gdtmStartDate.set( Calendar.YEAR, 2017);
         
-        m_gdtmStopDate.set( Calendar.DAY_OF_MONTH, 28);
-        m_gdtmStopDate.set( Calendar.MONTH, Calendar.DECEMBER);
-        m_gdtmStopDate.set( Calendar.YEAR, 2016);
+        m_gdtmStopDate.set( Calendar.DAY_OF_MONTH, 06);
+        m_gdtmStopDate.set( Calendar.MONTH, Calendar.JUNE);
+        m_gdtmStopDate.set( Calendar.YEAR, 2017);
         
         updateDate();
         
@@ -598,11 +598,19 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
                 if( Character.isDigit( strSelection.charAt( 0)) == true) {
                     //VAC.param
                     strFilename += ".VAC";
-                    strFilename += "." + strSelection.substring( 0, nPoint1);
-                    strFilename += "." + strSelection.substring( nPoint2 + 1, nPoint3);
                     
-                    HVV_VacuumDevice dev = ( HVV_VacuumDevice) HVV_VacuumDevices.getInstance().m_devices.get( strSelection.substring( 0, nPoint1));
-                    strAxisLabel = ( String) dev.m_mapParametersUnits.get( strSelection.substring( nPoint2 + 1, nPoint3));
+                    String strDevIndex = strSelection.substring( 0, nPoint1);
+                    strFilename += "." + strDevIndex;
+                    
+                    String strDevSubIndex;
+                    if( strSelection.charAt( 0) == '2')
+                        strDevSubIndex = strSelection.substring( nPoint3 + 1, nPoint4);
+                    else
+                        strDevSubIndex = strSelection.substring( nPoint2 + 1, nPoint3);
+                    strFilename += "." + strDevSubIndex;
+                    
+                    HVV_VacuumDevice dev = ( HVV_VacuumDevice) HVV_VacuumDevices.getInstance().m_devices.get( strDevIndex);
+                    strAxisLabel = ( String) dev.m_mapParametersUnits.get( strDevSubIndex);
                 }
                 else {
                     //HV.param
@@ -610,8 +618,8 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
                     strFilename += "." + strSelection.substring( 0, nPoint1);
                     strFilename += "." + strSelection.substring( nPoint3 + 1, nPoint4);
                     
-                    HVV_HvDevice dev = ( HVV_HvDevice) HVV_VacuumDevices.getInstance().m_devices.get( strSelection.substring( 0, nPoint1));
-                    strAxisLabel = ( String) dev.m_mapParametersUnits.get( strSelection.substring( nPoint2 + 1, nPoint3));
+                    HVV_HvDevice dev = ( HVV_HvDevice) HVV_HvDevices.getInstance().m_devices.get( strSelection.substring( 0, nPoint1));
+                    strAxisLabel = ( String) dev.m_mapParametersUnits.get( strSelection.substring( nPoint3 + 1, nPoint4));
                 }
 
                 strFilename += ".csv";
