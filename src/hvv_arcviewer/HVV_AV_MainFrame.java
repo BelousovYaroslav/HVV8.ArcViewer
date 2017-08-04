@@ -54,6 +54,8 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
     final private DefaultComboBoxModel cmbObjectModelG3;
     final private DefaultComboBoxModel cmbObjectModelG4;
     
+    private int m_nGraphs;
+            
     static Logger logger = Logger.getLogger( HVV_AV_MainFrame.class);
     /**
      * Creates new form HVV_AV_MainFrame
@@ -85,25 +87,28 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         btnLayout2x1.setText(""); btnLayout2x1.setIcon( theApp.GetResources().getIconLayout2x1());
         btnLayout2x2.setText(""); btnLayout2x2.setIcon( theApp.GetResources().getIconLayout2x2());
         
+        m_nGraphs = theApp.GetSettings().Get_nGraphs();
+        
+                
         m_panelGraph1 = new PanelGraph( theApp, theApp.series_g1);
         pnlGraph1.add( m_panelGraph1);
-        m_panelGraph1.setVisible( true);
-        m_panelGraph1.setBoundsO( 0, 0, 580, 380);
+        //m_panelGraph1.setVisible( true);
+        //m_panelGraph1.setBoundsO( 0, 0, 580, 380);
         
         m_panelGraph2 = new PanelGraph( theApp, theApp.series_g2);
         pnlGraph2.add( m_panelGraph2);
-        m_panelGraph2.setVisible( true);
-        m_panelGraph2.setBoundsO( 0, 0, 580, 380);
+        //m_panelGraph2.setVisible( true);
+        //m_panelGraph2.setBoundsO( 0, 0, 580, 380);
         
         m_panelGraph3 = new PanelGraph( theApp, theApp.series_g3);
         pnlGraph3.add( m_panelGraph3);
-        m_panelGraph3.setVisible( true);
-        m_panelGraph3.setBoundsO( 0, 0, 580, 380);
+        //m_panelGraph3.setVisible( true);
+        //m_panelGraph3.setBoundsO( 0, 0, 580, 380);
         
         m_panelGraph4 = new PanelGraph( theApp, theApp.series_g4);
         pnlGraph4.add( m_panelGraph4);
-        m_panelGraph4.setVisible( true);
-        m_panelGraph4.setBoundsO( 0, 0, 580, 380);
+        //m_panelGraph4.setVisible( true);
+        //m_panelGraph4.setBoundsO( 0, 0, 580, 380);
         
         cmbObjectModelG1 = new DefaultComboBoxModel();
         HVV_VacuumDevices.getInstance().fillComboGraph( cmbObjectModelG1, true);
@@ -123,7 +128,14 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         cmbObjectModelG4 = new DefaultComboBoxModel();
         HVV_VacuumDevices.getInstance().fillComboGraph( cmbObjectModelG4, true);
         HVV_HvDevices.getInstance().fillComboGraph( cmbObjectModelG4, false);
-        cmbGraph4.setModel( cmbObjectModelG4);        
+        cmbGraph4.setModel( cmbObjectModelG4);
+        
+        SetGraphsViewStates();
+        
+        cmbGraph1.setSelectedIndex( theApp.GetSettings().Get_Graph1ViewParam());
+        cmbGraph2.setSelectedIndex( theApp.GetSettings().Get_Graph2ViewParam());
+        cmbGraph3.setSelectedIndex( theApp.GetSettings().Get_Graph3ViewParam());
+        cmbGraph4.setSelectedIndex( theApp.GetSettings().Get_Graph4ViewParam());
     }
 
     /**
@@ -170,6 +182,11 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1200, 1000));
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
         getContentPane().setLayout(null);
 
         cmbGraph1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "VC.00А.Контур контроля форвакуума.Состояние", "VC.001.Насос Edwards.Состояние", "VC.04A.Датчик.Показание", "VC.16A.РРГ (О2).Состояние", "VC.16A.РРГ (О2).Уставка", "VC.16A.РРГ (О2).Показание", "HV.Рубильник.Состояние", "HV.ЛГ1.Анод.Состояние", "HV.ЛГ1.Анод.Ток", "HV.ЛГ1.Анод.Напряжение", "HV.ЛГ1.Штенгель.Состояние", "HV.ЛГ1.Штенгель.Ток", "HV.ЛГ1.Штенгель.Напряжение", "HV.ЛГ2.Анод.Состояние", "HV.ЛГ2.Анод.Ток", "HV.ЛГ2.Анод.Напряжение", "HV.ЛГ2.Штенгель.Ток", "HV.ЛГ2.Штенгель.Напряжение", "HV.ЛГ3.Анод.Ток", "HV.ЛГ3.Анод.Напряжение", "HV.ЛГ3.Штенгель.Ток", "HV.ЛГ3.Штенгель.Напряжение", "HV.ЛГ4.Анод.Ток", "HV.ЛГ4.Анод.Напряжение", "HV.ЛГ4.Штенгель.Ток", "HV.ЛГ4.Штенгель.Напряжение", "HV.ЛГ5.Анод.Ток", "HV.ЛГ5.Анод.Напряжение", "HV.ЛГ5.Штенгель.Ток", "HV.ЛГ5.Штенгель.Напряжение", "HV.ЛГ6.Анод.Ток", "HV.ЛГ6.Анод.Напряжение", "HV.ЛГ6.Штенгель.Ток", "HV.ЛГ6.Штенгель.Напряжение", "HV.ЛГ7.Анод.Ток", "HV.ЛГ7.Анод.Напряжение", "HV.ЛГ7.Штенгель.Ток", "HV.ЛГ7.Штенгель.Напряжение", "HV.ЛГ8.Анод.Ток", "HV.ЛГ8.Анод.Напряжение", "HV.ЛГ8.Штенгель.Ток", "HV.ЛГ8.Штенгель.Напряжение" }));
@@ -879,50 +896,86 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
             
     }//GEN-LAST:event_btnRefreshActionPerformed
 
+    public void SetGraphsViewStates() {
+        switch( m_nGraphs) {
+            case 2:
+                pnlGraph1.setVisible( true);    cmbGraph1.setVisible( true);
+                pnlGraph2.setVisible( false);   cmbGraph2.setVisible( false);
+                pnlGraph3.setVisible( true);    cmbGraph3.setVisible( true);
+                pnlGraph4.setVisible( false);   cmbGraph4.setVisible( false);
+
+                cmbGraph1.setBounds( 10, 10,  1180, 25);    pnlGraph1.setBounds( 10, 35,  1180, 380);   m_panelGraph1.setBoundsO( 0, 0, 1180, 380);
+                cmbGraph3.setBounds( 10, 430, 1180, 25);    pnlGraph3.setBounds( 10, 455, 1180, 380);   m_panelGraph3.setBoundsO( 0, 0, 1180, 380);
+            break;
+                
+            case 3:
+                pnlGraph1.setVisible( true);    cmbGraph1.setVisible( true);
+                pnlGraph2.setVisible( true);    cmbGraph2.setVisible( true);
+                pnlGraph3.setVisible( false);   cmbGraph3.setVisible( false);
+                pnlGraph4.setVisible( false);   cmbGraph4.setVisible( false);
+
+                cmbGraph1.setBounds( 10,  10, 580, 25);    pnlGraph1.setBounds( 10,  35, 580, 805);     m_panelGraph1.setBoundsO( 0, 0, 580, 805);
+                cmbGraph2.setBounds( 600, 10, 580, 25);    pnlGraph2.setBounds( 600, 35, 580, 805);     m_panelGraph2.setBoundsO( 0, 0, 580, 805);
+            break;
+                
+            case 4:
+                pnlGraph1.setVisible( true);    cmbGraph1.setVisible( true);
+                pnlGraph2.setVisible( true);    cmbGraph2.setVisible( true);
+                pnlGraph3.setVisible( true);    cmbGraph3.setVisible( true);
+                pnlGraph4.setVisible( true);    cmbGraph4.setVisible( true);
+
+                cmbGraph1.setBounds( 10,  10, 580, 25);    pnlGraph1.setBounds( 10,  35,  580, 380);    m_panelGraph1.setBoundsO( 0, 0, 580, 380);
+                cmbGraph2.setBounds( 600, 10, 580, 25);    pnlGraph2.setBounds( 600, 35,  580, 380);    m_panelGraph2.setBoundsO( 0, 0, 580, 380);
+                cmbGraph3.setBounds( 10,  430, 580, 25);   pnlGraph3.setBounds( 10,  455, 580, 380);    m_panelGraph3.setBoundsO( 0, 0, 580, 380);
+                cmbGraph4.setBounds( 600, 430, 580, 25);   pnlGraph4.setBounds( 600, 455, 580, 380);    m_panelGraph4.setBoundsO( 0, 0, 580, 380);
+            break;
+                
+            default:
+                pnlGraph1.setVisible( true);    cmbGraph1.setVisible( true);
+                pnlGraph2.setVisible( false);   cmbGraph2.setVisible( false);
+                pnlGraph3.setVisible( false);   cmbGraph3.setVisible( false);
+                pnlGraph4.setVisible( false);   cmbGraph4.setVisible( false);
+
+                cmbGraph1.setBounds( 10, 10, 1180, 25);     pnlGraph1.setBounds( 10, 35, 1180, 805);    m_panelGraph1.setBoundsO( 0, 0, 1180, 805);
+            break;
+        }
+    }
     private void btnLayout1x1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLayout1x1ActionPerformed
-        pnlGraph1.setVisible( true);    cmbGraph1.setVisible( true);
-        pnlGraph2.setVisible( false);   cmbGraph2.setVisible( false);
-        pnlGraph3.setVisible( false);   cmbGraph3.setVisible( false);
-        pnlGraph4.setVisible( false);   cmbGraph4.setVisible( false);
-        
-        cmbGraph1.setBounds( 10, 10, 1180, 25);     pnlGraph1.setBounds( 10, 35, 1180, 805);    m_panelGraph1.setBoundsO( 0, 0, 1180, 805);
+        m_nGraphs = 1;
+        SetGraphsViewStates();
     }//GEN-LAST:event_btnLayout1x1ActionPerformed
 
     private void btnLayout1x2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLayout1x2ActionPerformed
-        pnlGraph1.setVisible( true);    cmbGraph1.setVisible( true);
-        pnlGraph2.setVisible( false);   cmbGraph2.setVisible( false);
-        pnlGraph3.setVisible( true);    cmbGraph3.setVisible( true);
-        pnlGraph4.setVisible( false);   cmbGraph4.setVisible( false);
-        
-        cmbGraph1.setBounds( 10, 10,  1180, 25);    pnlGraph1.setBounds( 10, 35,  1180, 380);   m_panelGraph1.setBoundsO( 0, 0, 1180, 380);
-        cmbGraph3.setBounds( 10, 430, 1180, 25);    pnlGraph3.setBounds( 10, 455, 1180, 380);   m_panelGraph3.setBoundsO( 0, 0, 1180, 380);
+        m_nGraphs = 2;
+        SetGraphsViewStates();        
     }//GEN-LAST:event_btnLayout1x2ActionPerformed
 
     private void btnLayout2x1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLayout2x1ActionPerformed
-        pnlGraph1.setVisible( true);    cmbGraph1.setVisible( true);
-        pnlGraph2.setVisible( true);    cmbGraph2.setVisible( true);
-        pnlGraph3.setVisible( false);   cmbGraph3.setVisible( false);
-        pnlGraph4.setVisible( false);   cmbGraph4.setVisible( false);
-        
-        cmbGraph1.setBounds( 10,  10, 580, 25);    pnlGraph1.setBounds( 10,  35, 580, 805);     m_panelGraph1.setBoundsO( 0, 0, 580, 805);
-        cmbGraph2.setBounds( 600, 10, 580, 25);    pnlGraph2.setBounds( 600, 35, 580, 805);     m_panelGraph2.setBoundsO( 0, 0, 580, 805);
+        m_nGraphs = 3;
+        SetGraphsViewStates();
     }//GEN-LAST:event_btnLayout2x1ActionPerformed
 
     private void btnLayout2x2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLayout2x2ActionPerformed
-        pnlGraph1.setVisible( true);    cmbGraph1.setVisible( true);
-        pnlGraph2.setVisible( true);    cmbGraph2.setVisible( true);
-        pnlGraph3.setVisible( true);    cmbGraph3.setVisible( true);
-        pnlGraph4.setVisible( true);    cmbGraph4.setVisible( true);
-        
-        cmbGraph1.setBounds( 10,  10, 580, 25);    pnlGraph1.setBounds( 10,  35,  580, 380);    m_panelGraph1.setBoundsO( 0, 0, 580, 380);
-        cmbGraph2.setBounds( 600, 10, 580, 25);    pnlGraph2.setBounds( 600, 35,  580, 380);    m_panelGraph2.setBoundsO( 0, 0, 580, 380);
-        cmbGraph3.setBounds( 10,  430, 580, 25);   pnlGraph3.setBounds( 10,  455, 580, 380);    m_panelGraph3.setBoundsO( 0, 0, 580, 380);
-        cmbGraph4.setBounds( 600, 430, 580, 25);   pnlGraph4.setBounds( 600, 455, 580, 380);    m_panelGraph4.setBoundsO( 0, 0, 580, 380);
+        m_nGraphs = 4;
+        SetGraphsViewStates();
     }//GEN-LAST:event_btnLayout2x2ActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
-        System.exit( 0);
+        //theApp.GetSettings().Set_nGraphs( m_nGraphs);
+        //theApp.GetSettings().SaveSettings();
+        dispose();
     }//GEN-LAST:event_btnExitActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        theApp.GetSettings().Set_nGraphs( m_nGraphs);
+        
+        theApp.GetSettings().Set_Graph1ViewParam( cmbGraph1.getSelectedIndex());
+        theApp.GetSettings().Set_Graph2ViewParam( cmbGraph2.getSelectedIndex());
+        theApp.GetSettings().Set_Graph3ViewParam( cmbGraph3.getSelectedIndex());
+        theApp.GetSettings().Set_Graph4ViewParam( cmbGraph4.getSelectedIndex());
+        
+        theApp.GetSettings().SaveSettings();
+    }//GEN-LAST:event_formWindowClosed
 
     private void updateDate() {
         

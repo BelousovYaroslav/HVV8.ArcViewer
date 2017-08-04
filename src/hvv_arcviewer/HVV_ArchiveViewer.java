@@ -116,7 +116,7 @@ public class HVV_ArchiveViewer {
         //главная переменная окружения
         String strAMSrootEnvVar = System.getenv( "AMS_ROOT");
         if( strAMSrootEnvVar == null) {
-            MessageBoxError( "Не задана переменная окружения AMS_ROOT!", "HVV_Poller");
+            MessageBoxError( "Не задана переменная окружения AMS_ROOT!", "HVV_ArchiveViewer");
             return;
         }
         
