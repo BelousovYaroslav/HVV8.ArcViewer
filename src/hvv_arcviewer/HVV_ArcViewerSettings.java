@@ -84,7 +84,7 @@ public class HVV_ArcViewerSettings {
                 
                 //logger.debug( "Pairs: [" + name + " : " + value + "]");
                 
-                if( "singleInstancePort".equals( name)) m_nSingleInstanceSocketServerPort = Integer.parseInt( value);
+                if( "singleInstancePort.ArcViewer".equals( name)) m_nSingleInstanceSocketServerPort = Integer.parseInt( value);
                 
                 if( "nGraphs".equals( name)) m_nGraphs = Integer.parseInt( value);
                 
