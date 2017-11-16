@@ -66,12 +66,13 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         
         initComponents();
         theApp = app;
-        setTitle( "Модуль просмотра архивных данных, v.1.0.0.0 (2017.07.27 11:25), (C) ФЛАВТ 2017.");
+        setTitle( "Модуль просмотра архивных данных, v.1.0.0.0 (2017.11.16 15:30), (C) ФЛАВТ 2017.");
         m_gdtmStartDate = ( GregorianCalendar) Calendar.getInstance();
         m_gdtmStopDate = ( GregorianCalendar) m_gdtmStartDate.clone();
         m_gdtmStopDate.add( Calendar.DAY_OF_MONTH, -1);
         m_gdtmStopDate.add( Calendar.HOUR, 2);
         
+        /*
         m_gdtmStartDate.set( Calendar.DAY_OF_MONTH, 06);
         m_gdtmStartDate.set( Calendar.MONTH, Calendar.JUNE);
         m_gdtmStartDate.set( Calendar.YEAR, 2017);
@@ -79,6 +80,7 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         m_gdtmStopDate.set( Calendar.DAY_OF_MONTH, 06);
         m_gdtmStopDate.set( Calendar.MONTH, Calendar.JUNE);
         m_gdtmStopDate.set( Calendar.YEAR, 2017);
+        */
         
         updateDate();
         
