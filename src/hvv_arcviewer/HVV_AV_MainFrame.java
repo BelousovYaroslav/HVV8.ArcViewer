@@ -570,31 +570,37 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
             
             bRunningDates = true;
             do {    
-                String strFilename =  theApp.GetAMSRoot() + "/data/" + gdt.get( Calendar.YEAR);
-                String strMonthpackedDirectoryZipFile = theApp.GetAMSRoot() + "/data/" + gdt.get( Calendar.YEAR);
-
+                String strCsvFilename =  theApp.GetAMSRoot() + "/data/" + gdt.get( Calendar.YEAR);
+                String strYearPackedDirectoryZipFile = theApp.GetAMSRoot() + "/data/" + gdt.get( Calendar.YEAR);
+                String strMonthPackedDirectoryZipFile = strYearPackedDirectoryZipFile;
+                
                 int nMonth = gdt.get( Calendar.MONTH) + 1;
                 if( nMonth < 10) {
-                    strFilename += ".0" + nMonth;
-                    strMonthpackedDirectoryZipFile += ".0" + nMonth + "/" + gdt.get( Calendar.YEAR) + ".0" + nMonth;
+                    strCsvFilename += ".0" + nMonth;
+                    strMonthPackedDirectoryZipFile += ".0" + nMonth + "/" + gdt.get( Calendar.YEAR) + ".0" + nMonth;
+                    strYearPackedDirectoryZipFile += "/" + gdt.get( Calendar.YEAR) + ".0" + nMonth;
                 }
                 else {
-                    strFilename += "." + nMonth;
-                    strMonthpackedDirectoryZipFile += "." + nMonth + "/" + gdt.get( Calendar.YEAR) + "." + nMonth;
+                    strCsvFilename += "." + nMonth;
+                    strMonthPackedDirectoryZipFile += "." + nMonth + "/" + gdt.get( Calendar.YEAR) + "." + nMonth;
+                    strYearPackedDirectoryZipFile += "/" + gdt.get( Calendar.YEAR) + nMonth;
                 }
                 
                 int nDay = gdt.get( Calendar.DAY_OF_MONTH);
                 if( nDay < 10) {
-                    strFilename += ".0" + nDay;
-                    strMonthpackedDirectoryZipFile += ".0" + nDay;
+                    strCsvFilename += ".0" + nDay;
+                    strMonthPackedDirectoryZipFile += ".0" + nDay;
+                    strYearPackedDirectoryZipFile  += ".0" + nDay;
                 }
                 else {
-                    strFilename += "." + nDay;
-                    strMonthpackedDirectoryZipFile += "." + nDay;
+                    strCsvFilename += "." + nDay;
+                    strMonthPackedDirectoryZipFile += "." + nDay;
+                    strYearPackedDirectoryZipFile  += "." + nDay;
                 }
                 
-                strMonthpackedDirectoryZipFile += ".zip";
-                String strZipFilename = strFilename + ".zip";
+                strMonthPackedDirectoryZipFile += ".zip";
+                strYearPackedDirectoryZipFile += ".zip";
+                String strZipFilename = strCsvFilename + ".zip";
                 
                 
                 JComboBox cmb;
@@ -616,49 +622,50 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
 
                 if( Character.isDigit( strSelection.charAt( 0)) == true) {
                     //VAC.param
-                    strFilename += ".VAC";
+                    strCsvFilename += ".VAC";
                     
                     String strDevIndex = strSelection.substring( 0, nPoint1);
-                    strFilename += "." + strDevIndex;
+                    strCsvFilename += "." + strDevIndex;
                     
                     String strDevSubIndex;
                     if( strSelection.charAt( 0) == '2')
                         strDevSubIndex = strSelection.substring( nPoint3 + 1, nPoint4);
                     else
                         strDevSubIndex = strSelection.substring( nPoint2 + 1, nPoint3);
-                    strFilename += "." + strDevSubIndex;
+                    strCsvFilename += "." + strDevSubIndex;
                     
                     HVV_VacuumDevice dev = ( HVV_VacuumDevice) HVV_VacuumDevices.getInstance().m_devices.get( strDevIndex);
                     strAxisLabel = ( String) dev.m_mapParametersUnits.get( strDevSubIndex);
                 }
                 else {
                     //HV.param
-                    strFilename += ".HV";
-                    strFilename += "." + strSelection.substring( 0, nPoint1);
-                    strFilename += "." + strSelection.substring( nPoint3 + 1, nPoint4);
+                    strCsvFilename += ".HV";
+                    strCsvFilename += "." + strSelection.substring( 0, nPoint1);
+                    strCsvFilename += "." + strSelection.substring( nPoint3 + 1, nPoint4);
                     
                     HVV_HvDevice dev = ( HVV_HvDevice) HVV_HvDevices.getInstance().m_devices.get( strSelection.substring( 0, nPoint1));
                     strAxisLabel = ( String) dev.m_mapParametersUnits.get( strSelection.substring( nPoint3 + 1, nPoint4));
                 }
 
-                strFilename += ".csv";
+                strCsvFilename += ".csv";
 
-                logger.info( "CSV file: '" + strFilename + "'");
+                logger.info( "CSV file: '" + strCsvFilename + "'");
                 logger.info( "ZIP file: '" + strZipFilename + "'");
-                logger.info( "ZIP folder-packed-file: '" + strMonthpackedDirectoryZipFile + "'");
+                logger.info("ZIP monthly-folder-packed-file: '" + strMonthPackedDirectoryZipFile + "'");
+                logger.info( "ZIP  yearly-folder-packed-file: '" + strYearPackedDirectoryZipFile + "'");
                 
                 //check if file exists
-                File f = new File( strFilename);
+                File f = new File( strCsvFilename);
                 if( f.exists() == false) { 
                     
                     //check if ZIP File exists
                     f = new File( strZipFilename);
                     
                     if( !f.exists()) {
-                        //давайте попробуем вытащить архив из папки архивов под нзаванием "ГОД.МЕСЯЦ"
-                        File f_arcFolded = new File( strMonthpackedDirectoryZipFile);
+                        //давайте попробуем вытащить ZIP-архив из папки архивов под названием "ГОД.МЕСЯЦ"
+                        File f_arcFolded = new File( strMonthPackedDirectoryZipFile);
                         if( f_arcFolded.exists()) {
-                            Path src = FileSystems.getDefault().getPath( strMonthpackedDirectoryZipFile);
+                            Path src = FileSystems.getDefault().getPath(strMonthPackedDirectoryZipFile);
                             Path dst = FileSystems.getDefault().getPath( strZipFilename);
                             try {
                                 Files.move( src, dst, REPLACE_EXISTING);
@@ -667,7 +674,24 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
                             }
                         }
                         
-                        //check again if ZIP File exists ;)
+                        //check again if ZIP File exists in /data folder ;)
+                        f = new File( strZipFilename);
+                    }
+                    
+                    if( !f.exists()) {
+                        //CSV файла нет, ZIP файла в папке ГОД.МЕСЯЦ нет, давайте попробуем вытащить ZIP-файл из папки ГОД
+                        File f_arcFolded = new File( strYearPackedDirectoryZipFile);
+                        if( f_arcFolded.exists()) {
+                            Path src = FileSystems.getDefault().getPath( strYearPackedDirectoryZipFile);
+                            Path dst = FileSystems.getDefault().getPath( strZipFilename);
+                            try {
+                                Files.move( src, dst, REPLACE_EXISTING);
+                            } catch( IOException ex) {
+                                logger.error( "IOException caught!", ex);
+                            }
+                        }
+                        
+                        //check again if ZIP File exists in /data folder ;)
                         f = new File( strZipFilename);
                     }
                     
@@ -762,11 +786,11 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
 
                 FileInputStream fin = null;
                 try {
-                    fin = new FileInputStream( strFilename);
+                    fin = new FileInputStream( strCsvFilename);
                     fin.close();
 
                     //файл 1
-                    BufferedReader br = new BufferedReader( new FileReader( strFilename));
+                    BufferedReader br = new BufferedReader( new FileReader( strCsvFilename));
 
                     String strLine;
                     double dblSumm = 0.;
