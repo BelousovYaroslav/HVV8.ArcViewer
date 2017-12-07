@@ -50,6 +50,8 @@ public class HVV_ArcViewerSettings {
     public int Get_Graph4ViewParam() { return m_nGraph4ViewParam;}
     public void Set_Graph4ViewParam( int nNewValue) { m_nGraph4ViewParam = nNewValue;}
     
+    private int m_nTimeZoneShift;
+    public int GetTimeZoneShift() { return m_nTimeZoneShift;}
     
     public HVV_ArcViewerSettings( String strAMSRoot) {
         m_nSingleInstanceSocketServerPort = 10005;
@@ -60,6 +62,8 @@ public class HVV_ArcViewerSettings {
         m_nGraph2ViewParam = 2;
         m_nGraph3ViewParam = 3;
         m_nGraph4ViewParam = 4;
+        
+        m_nTimeZoneShift = 0;
         
         ReadSettings();
     }
@@ -93,7 +97,7 @@ public class HVV_ArcViewerSettings {
                 if( "Graph3ViewParam".equals( name)) m_nGraph3ViewParam = Integer.parseInt( value);
                 if( "Graph4ViewParam".equals( name)) m_nGraph4ViewParam = Integer.parseInt( value);
                 
-                //if( "timezone".equals( name)) m_nTimeZoneShift = Integer.parseInt( value);
+                if( "timezone".equals( name)) m_nTimeZoneShift = Integer.parseInt( value);
             }
             
         } catch( MalformedURLException ex) {
@@ -133,7 +137,7 @@ public class HVV_ArcViewerSettings {
                         if( "Graph3ViewParam".equals( name)) m_nGraph3ViewParam = Integer.parseInt( value);
                         if( "Graph4ViewParam".equals( name)) m_nGraph4ViewParam = Integer.parseInt( value);
                         
-                        //if( "timezone".equals( name)) m_nTimeZoneShift = Integer.parseInt( value);
+                        if( "timezone".equals( name)) m_nTimeZoneShift = Integer.parseInt( value);
                     }
                 }
 

@@ -8,6 +8,7 @@ package hvv_arcviewer;
 import hvv_resources.HVV_Resources;
 import java.io.File;
 import java.net.ServerSocket;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
@@ -153,5 +154,10 @@ public class HVV_ArchiveViewer {
     public static void MessageBoxError( String strMessage, String strTitleBar)
     {
         JOptionPane.showMessageDialog( null, strMessage, strTitleBar, JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public Date GetLocalDate() {
+        Date dt = new Date( System.currentTimeMillis() - 1000 * 60 * 60 * GetSettings().GetTimeZoneShift());
+        return dt;
     }
 }
