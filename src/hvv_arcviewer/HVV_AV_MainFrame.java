@@ -20,7 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import javax.swing.DefaultComboBoxModel;
@@ -66,13 +65,17 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         
         initComponents();
         theApp = app;
-        setTitle( "Модуль просмотра архивных данных, v.1.0.0.0 (2017.12.07 13:40), (C) ФЛАВТ 2017.");
-        m_gdtmStartDate = new GregorianCalendar();
-        m_gdtmStartDate.setTime( theApp.GetLocalDate());
-        m_gdtmStartDate.add( Calendar.DAY_OF_MONTH, -1);
-        
-        m_gdtmStopDate = new GregorianCalendar();
-        m_gdtmStopDate.setTime( theApp.GetLocalDate());
+        setTitle( "Модуль просмотра архивных данных, 2018.02.13 12:00, (C) ФЛАВТ 2018.");
+        m_gdtmStartDate = ( GregorianCalendar) theApp.GetSettings().GetStartDtm().clone();
+        m_gdtmStopDate = ( GregorianCalendar) theApp.GetSettings().GetStopDtm().clone();
+
+        switch( theApp.GetSettings().GetNaNProcessing()) {
+            case 0: radNaNProc1.setSelected( true); break;
+            case 1: radNaNProc2.setSelected( true); break;
+            case 2: radNaNProc3.setSelected( true); break;
+        }
+        edtNaNProc.setText( String.format( "%.3f", theApp.GetSettings().GetNaNProcessingReplacement()).replace( ',', '.'));
+        jProgressBar1.setVisible(false);
         
         /*
         m_gdtmStartDate.set( Calendar.DAY_OF_MONTH, 06);
@@ -151,6 +154,7 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         cmbGraph1 = new javax.swing.JComboBox();
         cmbGraph2 = new javax.swing.JComboBox();
         cmbGraph3 = new javax.swing.JComboBox();
@@ -175,16 +179,21 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         lblStopHour = new javax.swing.JLabel();
         lblDblPoint1 = new javax.swing.JLabel();
         lblStopMinutes = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
         btnLayout1x1 = new javax.swing.JButton();
         btnLayout1x2 = new javax.swing.JButton();
         btnLayout2x1 = new javax.swing.JButton();
         btnLayout2x2 = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
+        lblNaNProcTitle = new javax.swing.JLabel();
+        radNaNProc3 = new javax.swing.JRadioButton();
+        radNaNProc1 = new javax.swing.JRadioButton();
+        radNaNProc2 = new javax.swing.JRadioButton();
+        edtNaNProc = new javax.swing.JTextField();
+        jProgressBar1 = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1200, 1000));
+        setMinimumSize(new java.awt.Dimension(1200, 1020));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
@@ -421,10 +430,6 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         getContentPane().add(lblStopMinutes);
         lblStopMinutes.setBounds(720, 860, 50, 40);
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(968, 10, 220, 0);
-
         btnLayout1x1.setText("1x1");
         btnLayout1x1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -478,6 +483,32 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         });
         getContentPane().add(btnExit);
         btnExit.setBounds(840, 920, 350, 40);
+
+        lblNaNProcTitle.setText("Как интерпретировать NaN в данных");
+        getContentPane().add(lblNaNProcTitle);
+        lblNaNProcTitle.setBounds(370, 920, 380, 20);
+
+        buttonGroup1.add(radNaNProc3);
+        radNaNProc3.setText("как число");
+        getContentPane().add(radNaNProc3);
+        radNaNProc3.setBounds(630, 940, 100, 30);
+
+        buttonGroup1.add(radNaNProc1);
+        radNaNProc1.setSelected(true);
+        radNaNProc1.setText("Как и раньше");
+        getContentPane().add(radNaNProc1);
+        radNaNProc1.setBounds(370, 940, 124, 30);
+
+        buttonGroup1.add(radNaNProc2);
+        radNaNProc2.setText("пропускать");
+        getContentPane().add(radNaNProc2);
+        radNaNProc2.setBounds(500, 940, 125, 30);
+
+        edtNaNProc.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        getContentPane().add(edtNaNProc);
+        edtNaNProc.setBounds(730, 940, 80, 30);
+        getContentPane().add(jProgressBar1);
+        jProgressBar1.setBounds(0, 980, 1190, 14);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -783,9 +814,21 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
                 //ZipInputStream zis;
 
 
-
+                
                 long lRunningDate = m_gdtmStartDate.getTimeInMillis() + ( long) dblRunningTimeStepMillis;
 
+                jProgressBar1.setMinimum( 0);
+                jProgressBar1.setMaximum( ( int) ( m_gdtmStopDate.getTimeInMillis() - m_gdtmStartDate.getTimeInMillis()));
+                jProgressBar1.setValue( ( int) ( lRunningDate - m_gdtmStartDate.getTimeInMillis()));
+                
+                double dblReplaceValue = 0;
+                try {
+                    dblReplaceValue = Double.parseDouble( edtNaNProc.getText().replace( ',', '.'));
+                }
+                catch( NumberFormatException ex) {
+                    logger.warn( ex);
+                }
+                
                 FileInputStream fin = null;
                 try {
                     fin = new FileInputStream( strCsvFilename);
@@ -833,8 +876,24 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
                                     
                                     //logger.info( "GRAPH" + nGraph + " ADDING (" + val+ ")!");
                                     lRunningDate += ( long) dblRunningTimeStepMillis;
+                                    jProgressBar1.setValue( ( int) ( lRunningDate - m_gdtmStartDate.getTimeInMillis()));
                                     
-                                    seria.addOrUpdate( new Millisecond(dt), val);
+                                    if( Double.isNaN( val)) {
+                                        if( radNaNProc1.isSelected()) {
+                                            //as it is
+                                            seria.addOrUpdate( new Millisecond(dt), val);
+                                        }
+                                        else if( radNaNProc2.isSelected()) {
+                                            //skipping
+                                        }
+                                        else if( radNaNProc3.isSelected()) {
+                                            //replacing with number
+                                            seria.addOrUpdate( new Millisecond(dt), dblReplaceValue);
+                                        }
+                                    }
+                                    else
+                                        seria.addOrUpdate( new Millisecond(dt), val);
+                                    
                                     dblSumm = 0.; nC = 0;
 
                                 }
@@ -1002,6 +1061,22 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         theApp.GetSettings().Set_Graph3ViewParam( cmbGraph3.getSelectedIndex());
         theApp.GetSettings().Set_Graph4ViewParam( cmbGraph4.getSelectedIndex());
         
+        theApp.GetSettings().SetStartDtm( m_gdtmStartDate);
+        theApp.GetSettings().SetStopDtm( m_gdtmStopDate);
+        
+        if( radNaNProc1.isSelected()) theApp.GetSettings().SetNaNProcessing( 0);
+        else if( radNaNProc2.isSelected()) theApp.GetSettings().SetNaNProcessing( 1);
+        else if( radNaNProc3.isSelected()) theApp.GetSettings().SetNaNProcessing( 2);
+        
+        double dblRepl = 0.;
+        try {
+            dblRepl = Double.parseDouble( edtNaNProc.getText().replace( ',', '.'));
+        }
+        catch( NumberFormatException ex) {
+            logger.warn( ex);
+        }
+        theApp.GetSettings().SetNaNProcessingReplacement( dblRepl);
+        
         theApp.GetSettings().SaveSettings();
     }//GEN-LAST:event_formWindowClosed
 
@@ -1086,15 +1161,18 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnLayout2x1;
     private javax.swing.JButton btnLayout2x2;
     private javax.swing.JButton btnRefresh;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox cmbGraph1;
     private javax.swing.JComboBox cmbGraph2;
     private javax.swing.JComboBox cmbGraph3;
     private javax.swing.JComboBox cmbGraph4;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JTextField edtNaNProc;
+    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JLabel lblDblPoint;
     private javax.swing.JLabel lblDblPoint1;
     private javax.swing.JLabel lblHour;
     private javax.swing.JLabel lblMinutes;
+    private javax.swing.JLabel lblNaNProcTitle;
     private javax.swing.JLabel lblPoint1;
     private javax.swing.JLabel lblPoint2;
     private javax.swing.JLabel lblPoint3;
@@ -1111,5 +1189,8 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel pnlGraph2;
     private javax.swing.JPanel pnlGraph3;
     private javax.swing.JPanel pnlGraph4;
+    private javax.swing.JRadioButton radNaNProc1;
+    private javax.swing.JRadioButton radNaNProc2;
+    private javax.swing.JRadioButton radNaNProc3;
     // End of variables declaration//GEN-END:variables
 }

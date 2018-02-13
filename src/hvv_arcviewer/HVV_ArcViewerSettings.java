@@ -10,6 +10,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -53,6 +58,22 @@ public class HVV_ArcViewerSettings {
     private int m_nTimeZoneShift;
     public int GetTimeZoneShift() { return m_nTimeZoneShift;}
     
+    private GregorianCalendar m_gclndStart;
+    public GregorianCalendar GetStartDtm() { return m_gclndStart; }
+    public void SetStartDtm( GregorianCalendar gclndNewDtm) { m_gclndStart = ( GregorianCalendar) gclndNewDtm.clone();}
+    
+    private GregorianCalendar m_gclndStop;
+    public GregorianCalendar GetStopDtm() { return m_gclndStop; }
+    public void SetStopDtm( GregorianCalendar gclndNewDtm) { m_gclndStop = ( GregorianCalendar) gclndNewDtm.clone();}
+    
+    private int m_nNaNProcessing;
+    public int GetNaNProcessing() { return m_nNaNProcessing;}
+    public void SetNaNProcessing( int nNewValue) { m_nNaNProcessing = nNewValue;}
+    
+    private double m_dblNaNProcessingReplacement;
+    public double GetNaNProcessingReplacement() { return m_dblNaNProcessingReplacement;}
+    public void SetNaNProcessingReplacement( double dblNewValue) { m_dblNaNProcessingReplacement = dblNewValue;}
+    
     public HVV_ArcViewerSettings( String strAMSRoot) {
         m_nSingleInstanceSocketServerPort = 10005;
         
@@ -64,6 +85,12 @@ public class HVV_ArcViewerSettings {
         m_nGraph4ViewParam = 4;
         
         m_nTimeZoneShift = 0;
+
+        m_gclndStart = null;
+        m_gclndStop = null;
+        
+        m_nNaNProcessing = 0;
+        m_dblNaNProcessingReplacement = 0.;
         
         ReadSettings();
     }
@@ -73,7 +100,9 @@ public class HVV_ArcViewerSettings {
         try {
             SAXReader reader = new SAXReader();
             
-            String strSettingsFilePathName = System.getenv( "AMS_ROOT") + "/etc/settings.arcviewer.r.xml";
+            String strSettingsFilePathName = System.getenv( "AMS_ROOT") + File.separator +
+                                            "etc" + File.separator +
+                                            "settings.arcviewer.r.xml";
             URL url = ( new java.io.File( strSettingsFilePathName)).toURI().toURL();
             
             Document document = reader.read( url);
@@ -97,7 +126,19 @@ public class HVV_ArcViewerSettings {
                 if( "Graph3ViewParam".equals( name)) m_nGraph3ViewParam = Integer.parseInt( value);
                 if( "Graph4ViewParam".equals( name)) m_nGraph4ViewParam = Integer.parseInt( value);
                 
+                SimpleDateFormat formatter = new SimpleDateFormat( "yyyy.MM.dd HH:mm:ss");
+                try {
+                    if( "gclndrStart".equals( name)) { m_gclndStart = new GregorianCalendar(); m_gclndStart.setTime( formatter.parse( value));}
+                    if( "gclndrStop".equals( name))  { m_gclndStop  = new GregorianCalendar();  m_gclndStop.setTime( formatter.parse( value));}
+                }
+                catch( ParseException ex) {
+                    logger.warn( ex);
+                }
+                        
                 if( "timezone".equals( name)) m_nTimeZoneShift = Integer.parseInt( value);
+                
+                if( "NaN.Processing".equals( name)) m_nNaNProcessing = Integer.parseInt( value);
+                if( "NaN.Processing.replace".equals( name)) m_dblNaNProcessingReplacement = Double.parseDouble( value.replace( ',', '.'));
             }
             
         } catch( MalformedURLException ex) {
@@ -112,7 +153,9 @@ public class HVV_ArcViewerSettings {
             try {
                 SAXReader reader = new SAXReader();
 
-                String strSettingsFilePathName = System.getenv( "AMS_ROOT") + "/etc/settings.arcviewer.rw.xml";
+                String strSettingsFilePathName = System.getenv( "AMS_ROOT") + File.separator +
+                                                    "etc" + File.separator +
+                                                    "settings.arcviewer.rw.xml";
                 File flCheckExistence = new File( strSettingsFilePathName);
                 if( flCheckExistence.exists()) {
                 
@@ -137,7 +180,26 @@ public class HVV_ArcViewerSettings {
                         if( "Graph3ViewParam".equals( name)) m_nGraph3ViewParam = Integer.parseInt( value);
                         if( "Graph4ViewParam".equals( name)) m_nGraph4ViewParam = Integer.parseInt( value);
                         
+                        SimpleDateFormat formatter = new SimpleDateFormat( "yyyy.MM.dd HH:mm:ss");
+                        try {
+                            if( "gclndrStart".equals( name)) { m_gclndStart = new GregorianCalendar(); m_gclndStart.setTime( formatter.parse( value));}
+                            if( "gclndrStop".equals( name))  { m_gclndStop  = new GregorianCalendar(); m_gclndStop.setTime(  formatter.parse( value));}
+                        }
+                        catch( ParseException ex) {
+                            logger.warn( ex);
+                        }
+                        
                         if( "timezone".equals( name)) m_nTimeZoneShift = Integer.parseInt( value);
+                        
+                        if( "NaN.Processing".equals( name)) m_nNaNProcessing = Integer.parseInt( value);
+                        if( "NaN.Processing.replace".equals( name)) {
+                            try {
+                                m_dblNaNProcessingReplacement = Double.parseDouble( value.replace(',', '.'));
+                            }
+                            catch( NumberFormatException ex) {
+                                logger.warn( ex);
+                            }
+                        }
                     }
                 }
 
@@ -148,6 +210,17 @@ public class HVV_ArcViewerSettings {
                 logger.error( "DocumentException caught while loading settings!", ex);
                 bResOk = false;
             }
+        }
+        
+        if( m_gclndStart == null) {
+            m_gclndStart = new GregorianCalendar();
+            m_gclndStart.setTime( new Date( System.currentTimeMillis() - 1000 * 60 * 60 * m_nTimeZoneShift));
+            m_gclndStart.add( Calendar.DAY_OF_MONTH, -1);
+        }
+        
+        if( m_gclndStop == null) {
+            m_gclndStop = new GregorianCalendar();
+            m_gclndStop.setTime( new Date( System.currentTimeMillis() - 1000 * 60 * 60 * m_nTimeZoneShift));
         }
         
         return bResOk;
@@ -169,10 +242,18 @@ public class HVV_ArcViewerSettings {
             root.addElement( "Graph3ViewParam").addText( "" + m_nGraph3ViewParam);
             root.addElement( "Graph4ViewParam").addText( "" + m_nGraph4ViewParam);
             
+            SimpleDateFormat formatter = new SimpleDateFormat( "yyyy.MM.dd HH:mm:ss");
+            root.addElement( "gclndrStart").addText( formatter.format( m_gclndStart.getTime()));
+            root.addElement( "gclndrStop").addText( formatter.format( m_gclndStop.getTime()));
+            
+            root.addElement( "NaN.Processing").addText( "" + m_nNaNProcessing);
+            root.addElement( "NaN.Processing.replace").addText( String.format( "%.03f", m_dblNaNProcessingReplacement).replace( ',', '.'));
+                
             OutputFormat format = OutputFormat.createPrettyPrint();
             
-            //TODO
-            String strSettingsFilePathName = System.getenv( "AMS_ROOT") + "/etc/settings.arcviewer.rw.xml";
+            String strSettingsFilePathName = System.getenv( "AMS_ROOT") + File.separator +
+                                                    "etc" + File.separator +
+                                                    "settings.arcviewer.rw.xml";
             
             XMLWriter writer = new XMLWriter( new FileWriter( strSettingsFilePathName), format);
             
