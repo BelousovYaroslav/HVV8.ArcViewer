@@ -64,6 +64,32 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
     public HVV_AV_MainFrame( HVV_ArchiveViewer app) {
         
         initComponents();
+        
+        btnStartDtDayUp.setIcon(    app.GetResources().getIconUp());
+        btnStartDtMonUp.setIcon(    app.GetResources().getIconUp());
+        btnStartDtYearUp.setIcon(   app.GetResources().getIconUp());
+        btnStartDtHourUp.setIcon(   app.GetResources().getIconUp());
+        btnStartDtMinUp.setIcon(    app.GetResources().getIconUp());
+        
+        btnStartDtDayDown.setIcon(  app.GetResources().getIconDown());
+        btnStartDtMonDown.setIcon(  app.GetResources().getIconDown());
+        btnStartDtYearDown.setIcon( app.GetResources().getIconDown());
+        btnStartDtHourDown.setIcon( app.GetResources().getIconDown());
+        btnStartDtMinDown.setIcon(  app.GetResources().getIconDown());
+        
+        btnStopDtDayUp.setIcon(     app.GetResources().getIconUp());
+        btnStopDtMonUp.setIcon(     app.GetResources().getIconUp());
+        btnStopDtYearUp.setIcon(    app.GetResources().getIconUp());
+        btnStopDtHourUp.setIcon(    app.GetResources().getIconUp());
+        btnStopDtMinUp.setIcon(     app.GetResources().getIconUp());
+        
+        btnStopDtDayDown.setIcon(   app.GetResources().getIconDown());
+        btnStopDtMonDown.setIcon(   app.GetResources().getIconDown());
+        btnStopDtYearDown.setIcon(  app.GetResources().getIconDown());
+        btnStopDtHourDown.setIcon(  app.GetResources().getIconDown());
+        btnStopDtMinDown.setIcon(   app.GetResources().getIconDown());
+        
+        
         theApp = app;
         setTitle( "Модуль просмотра архивных данных, 2018.02.13 12:00, (C) ФЛАВТ 2018.");
         m_gdtmStartDate = ( GregorianCalendar) theApp.GetSettings().GetStartDtm().clone();
@@ -159,37 +185,57 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         cmbGraph2 = new javax.swing.JComboBox();
         cmbGraph3 = new javax.swing.JComboBox();
         cmbGraph4 = new javax.swing.JComboBox();
-        lblPoint1 = new javax.swing.JLabel();
-        lblStartDay = new javax.swing.JLabel();
-        lblYear = new javax.swing.JLabel();
-        lblPoint2 = new javax.swing.JLabel();
-        lblStartMonth = new javax.swing.JLabel();
-        lblHour = new javax.swing.JLabel();
-        lblDblPoint = new javax.swing.JLabel();
-        lblMinutes = new javax.swing.JLabel();
         pnlGraph1 = new javax.swing.JPanel();
         pnlGraph2 = new javax.swing.JPanel();
         pnlGraph3 = new javax.swing.JPanel();
         pnlGraph4 = new javax.swing.JPanel();
-        lblPoint3 = new javax.swing.JLabel();
+        btnStartDtDayUp = new javax.swing.JButton();
+        lblStartDay = new javax.swing.JLabel();
+        btnStartDtDayDown = new javax.swing.JButton();
+        lblPoint1 = new javax.swing.JLabel();
+        btnStartDtMonUp = new javax.swing.JButton();
+        lblStartMonth = new javax.swing.JLabel();
+        btnStartDtMonDown = new javax.swing.JButton();
+        lblPoint2 = new javax.swing.JLabel();
+        btnStartDtYearUp = new javax.swing.JButton();
+        lblYear = new javax.swing.JLabel();
+        btnStartDtYearDown = new javax.swing.JButton();
+        btnStartDtHourUp = new javax.swing.JButton();
+        lblHour = new javax.swing.JLabel();
+        btnStartDtHourDown = new javax.swing.JButton();
+        lblDblPoint = new javax.swing.JLabel();
+        btnStartDtMinUp = new javax.swing.JButton();
+        lblMinutes = new javax.swing.JLabel();
+        btnStartDtMinDown = new javax.swing.JButton();
+        btnStopDtDayUp = new javax.swing.JButton();
         lblStopDay = new javax.swing.JLabel();
-        lblStopYear = new javax.swing.JLabel();
-        lblPoint4 = new javax.swing.JLabel();
+        btnStopDtDayDown = new javax.swing.JButton();
+        lblPoint3 = new javax.swing.JLabel();
+        btnStopDtMonUp = new javax.swing.JButton();
         lblStopMonth = new javax.swing.JLabel();
+        btnStopDtMonDown = new javax.swing.JButton();
+        lblPoint4 = new javax.swing.JLabel();
+        btnStopDtYearUp = new javax.swing.JButton();
+        lblStopYear = new javax.swing.JLabel();
+        btnStopDtYearDown = new javax.swing.JButton();
+        btnStopDtHourUp = new javax.swing.JButton();
         lblStopHour = new javax.swing.JLabel();
+        btnStopDtHourDown = new javax.swing.JButton();
         lblDblPoint1 = new javax.swing.JLabel();
+        btnStopDtMinUp = new javax.swing.JButton();
         lblStopMinutes = new javax.swing.JLabel();
+        btnStopDtMinDown = new javax.swing.JButton();
         btnLayout1x1 = new javax.swing.JButton();
         btnLayout1x2 = new javax.swing.JButton();
         btnLayout2x1 = new javax.swing.JButton();
         btnLayout2x2 = new javax.swing.JButton();
-        btnRefresh = new javax.swing.JButton();
-        btnExit = new javax.swing.JButton();
         lblNaNProcTitle = new javax.swing.JLabel();
         radNaNProc3 = new javax.swing.JRadioButton();
         radNaNProc1 = new javax.swing.JRadioButton();
         radNaNProc2 = new javax.swing.JRadioButton();
         edtNaNProc = new javax.swing.JTextField();
+        btnRefresh = new javax.swing.JButton();
+        btnExit = new javax.swing.JButton();
         jProgressBar1 = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -229,74 +275,6 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         cmbGraph4.setPreferredSize(new java.awt.Dimension(580, 25));
         getContentPane().add(cmbGraph4);
         cmbGraph4.setBounds(600, 430, 580, 25);
-
-        lblPoint1.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
-        lblPoint1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblPoint1.setText(".");
-        getContentPane().add(lblPoint1);
-        lblPoint1.setBounds(60, 860, 10, 40);
-
-        lblStartDay.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
-        lblStartDay.setText("30");
-        lblStartDay.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
-            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
-                lblStartDayMouseWheelMoved(evt);
-            }
-        });
-        getContentPane().add(lblStartDay);
-        lblStartDay.setBounds(10, 860, 50, 40);
-
-        lblYear.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
-        lblYear.setText("2015");
-        lblYear.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
-            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
-                lblYearMouseWheelMoved(evt);
-            }
-        });
-        getContentPane().add(lblYear);
-        lblYear.setBounds(130, 860, 100, 40);
-
-        lblPoint2.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
-        lblPoint2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblPoint2.setText(".");
-        getContentPane().add(lblPoint2);
-        lblPoint2.setBounds(120, 860, 10, 40);
-
-        lblStartMonth.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
-        lblStartMonth.setText("12");
-        lblStartMonth.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
-            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
-                lblStartMonthMouseWheelMoved(evt);
-            }
-        });
-        getContentPane().add(lblStartMonth);
-        lblStartMonth.setBounds(70, 860, 50, 40);
-
-        lblHour.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
-        lblHour.setText("20");
-        lblHour.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
-            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
-                lblHourMouseWheelMoved(evt);
-            }
-        });
-        getContentPane().add(lblHour);
-        lblHour.setBounds(240, 860, 50, 40);
-
-        lblDblPoint.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
-        lblDblPoint.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblDblPoint.setText(":");
-        getContentPane().add(lblDblPoint);
-        lblDblPoint.setBounds(290, 860, 10, 40);
-
-        lblMinutes.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
-        lblMinutes.setText("12");
-        lblMinutes.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
-            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
-                lblMinutesMouseWheelMoved(evt);
-            }
-        });
-        getContentPane().add(lblMinutes);
-        lblMinutes.setBounds(300, 860, 50, 40);
 
         pnlGraph1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -362,11 +340,176 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         getContentPane().add(pnlGraph4);
         pnlGraph4.setBounds(600, 455, 580, 380);
 
-        lblPoint3.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
-        lblPoint3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblPoint3.setText(".");
-        getContentPane().add(lblPoint3);
-        lblPoint3.setBounds(480, 860, 10, 40);
+        btnStartDtDayUp.setIcon(new javax.swing.ImageIcon("/home/yaroslav/HVV_HOME/res/images/up.gif")); // NOI18N
+        btnStartDtDayUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStartDtDayUpActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStartDtDayUp);
+        btnStartDtDayUp.setBounds(10, 840, 50, 20);
+
+        lblStartDay.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
+        lblStartDay.setText("30");
+        lblStartDay.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+                lblStartDayMouseWheelMoved(evt);
+            }
+        });
+        getContentPane().add(lblStartDay);
+        lblStartDay.setBounds(10, 860, 50, 40);
+
+        btnStartDtDayDown.setIcon(new javax.swing.ImageIcon("/home/yaroslav/HVV_HOME/res/images/down.gif")); // NOI18N
+        btnStartDtDayDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStartDtDayDownActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStartDtDayDown);
+        btnStartDtDayDown.setBounds(10, 900, 50, 20);
+
+        lblPoint1.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
+        lblPoint1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPoint1.setText(".");
+        getContentPane().add(lblPoint1);
+        lblPoint1.setBounds(60, 860, 10, 40);
+
+        btnStartDtMonUp.setIcon(new javax.swing.ImageIcon("/home/yaroslav/HVV_HOME/res/images/up.gif")); // NOI18N
+        btnStartDtMonUp.setToolTipText("");
+        btnStartDtMonUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStartDtMonUpActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStartDtMonUp);
+        btnStartDtMonUp.setBounds(70, 840, 50, 20);
+
+        lblStartMonth.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
+        lblStartMonth.setText("12");
+        lblStartMonth.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+                lblStartMonthMouseWheelMoved(evt);
+            }
+        });
+        getContentPane().add(lblStartMonth);
+        lblStartMonth.setBounds(70, 860, 50, 40);
+
+        btnStartDtMonDown.setIcon(new javax.swing.ImageIcon("/home/yaroslav/HVV_HOME/res/images/down.gif")); // NOI18N
+        btnStartDtMonDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStartDtMonDownActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStartDtMonDown);
+        btnStartDtMonDown.setBounds(70, 900, 50, 20);
+
+        lblPoint2.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
+        lblPoint2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPoint2.setText(".");
+        getContentPane().add(lblPoint2);
+        lblPoint2.setBounds(120, 860, 10, 40);
+
+        btnStartDtYearUp.setIcon(new javax.swing.ImageIcon("/home/yaroslav/HVV_HOME/res/images/up.gif")); // NOI18N
+        btnStartDtYearUp.setToolTipText("");
+        btnStartDtYearUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStartDtYearUpActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStartDtYearUp);
+        btnStartDtYearUp.setBounds(130, 840, 100, 20);
+
+        lblYear.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
+        lblYear.setText("2015");
+        lblYear.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+                lblYearMouseWheelMoved(evt);
+            }
+        });
+        getContentPane().add(lblYear);
+        lblYear.setBounds(130, 860, 100, 40);
+
+        btnStartDtYearDown.setIcon(new javax.swing.ImageIcon("/home/yaroslav/HVV_HOME/res/images/down.gif")); // NOI18N
+        btnStartDtYearDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStartDtYearDownActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStartDtYearDown);
+        btnStartDtYearDown.setBounds(130, 900, 100, 20);
+
+        btnStartDtHourUp.setIcon(new javax.swing.ImageIcon("/home/yaroslav/HVV_HOME/res/images/up.gif")); // NOI18N
+        btnStartDtHourUp.setToolTipText("");
+        btnStartDtHourUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStartDtHourUpActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStartDtHourUp);
+        btnStartDtHourUp.setBounds(240, 840, 50, 20);
+
+        lblHour.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
+        lblHour.setText("20");
+        lblHour.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+                lblHourMouseWheelMoved(evt);
+            }
+        });
+        getContentPane().add(lblHour);
+        lblHour.setBounds(240, 860, 50, 40);
+
+        btnStartDtHourDown.setIcon(new javax.swing.ImageIcon("/home/yaroslav/HVV_HOME/res/images/down.gif")); // NOI18N
+        btnStartDtHourDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStartDtHourDownActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStartDtHourDown);
+        btnStartDtHourDown.setBounds(240, 900, 50, 20);
+
+        lblDblPoint.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
+        lblDblPoint.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblDblPoint.setText(":");
+        getContentPane().add(lblDblPoint);
+        lblDblPoint.setBounds(290, 860, 10, 40);
+
+        btnStartDtMinUp.setIcon(new javax.swing.ImageIcon("/home/yaroslav/HVV_HOME/res/images/up.gif")); // NOI18N
+        btnStartDtMinUp.setToolTipText("");
+        btnStartDtMinUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStartDtMinUpActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStartDtMinUp);
+        btnStartDtMinUp.setBounds(300, 840, 50, 20);
+
+        lblMinutes.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
+        lblMinutes.setText("12");
+        lblMinutes.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+                lblMinutesMouseWheelMoved(evt);
+            }
+        });
+        getContentPane().add(lblMinutes);
+        lblMinutes.setBounds(300, 860, 50, 40);
+
+        btnStartDtMinDown.setIcon(new javax.swing.ImageIcon("/home/yaroslav/HVV_HOME/res/images/down.gif")); // NOI18N
+        btnStartDtMinDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStartDtMinDownActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStartDtMinDown);
+        btnStartDtMinDown.setBounds(300, 900, 50, 20);
+
+        btnStopDtDayUp.setIcon(new javax.swing.ImageIcon("/home/yaroslav/HVV_HOME/res/images/up.gif")); // NOI18N
+        btnStopDtDayUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStopDtDayUpActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStopDtDayUp);
+        btnStopDtDayUp.setBounds(430, 840, 50, 20);
 
         lblStopDay.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
         lblStopDay.setText("30");
@@ -378,21 +521,30 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         getContentPane().add(lblStopDay);
         lblStopDay.setBounds(430, 860, 50, 40);
 
-        lblStopYear.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
-        lblStopYear.setText("2015");
-        lblStopYear.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
-            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
-                lblStopYearMouseWheelMoved(evt);
+        btnStopDtDayDown.setIcon(new javax.swing.ImageIcon("/home/yaroslav/HVV_HOME/res/images/down.gif")); // NOI18N
+        btnStopDtDayDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStopDtDayDownActionPerformed(evt);
             }
         });
-        getContentPane().add(lblStopYear);
-        lblStopYear.setBounds(550, 860, 100, 40);
+        getContentPane().add(btnStopDtDayDown);
+        btnStopDtDayDown.setBounds(430, 900, 50, 20);
 
-        lblPoint4.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
-        lblPoint4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblPoint4.setText(".");
-        getContentPane().add(lblPoint4);
-        lblPoint4.setBounds(540, 860, 10, 40);
+        lblPoint3.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
+        lblPoint3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPoint3.setText(".");
+        getContentPane().add(lblPoint3);
+        lblPoint3.setBounds(480, 860, 10, 40);
+
+        btnStopDtMonUp.setIcon(new javax.swing.ImageIcon("/home/yaroslav/HVV_HOME/res/images/up.gif")); // NOI18N
+        btnStopDtMonUp.setToolTipText("");
+        btnStopDtMonUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStopDtMonUpActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStopDtMonUp);
+        btnStopDtMonUp.setBounds(490, 840, 50, 20);
 
         lblStopMonth.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
         lblStopMonth.setText("12");
@@ -404,6 +556,60 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         getContentPane().add(lblStopMonth);
         lblStopMonth.setBounds(490, 860, 50, 40);
 
+        btnStopDtMonDown.setIcon(new javax.swing.ImageIcon("/home/yaroslav/HVV_HOME/res/images/down.gif")); // NOI18N
+        btnStopDtMonDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStopDtMonDownActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStopDtMonDown);
+        btnStopDtMonDown.setBounds(490, 900, 50, 20);
+
+        lblPoint4.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
+        lblPoint4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPoint4.setText(".");
+        getContentPane().add(lblPoint4);
+        lblPoint4.setBounds(540, 860, 10, 40);
+
+        btnStopDtYearUp.setIcon(new javax.swing.ImageIcon("/home/yaroslav/HVV_HOME/res/images/up.gif")); // NOI18N
+        btnStopDtYearUp.setToolTipText("");
+        btnStopDtYearUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStopDtYearUpActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStopDtYearUp);
+        btnStopDtYearUp.setBounds(550, 840, 100, 20);
+
+        lblStopYear.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
+        lblStopYear.setText("2015");
+        lblStopYear.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+                lblStopYearMouseWheelMoved(evt);
+            }
+        });
+        getContentPane().add(lblStopYear);
+        lblStopYear.setBounds(550, 860, 100, 40);
+
+        btnStopDtYearDown.setIcon(new javax.swing.ImageIcon("/home/yaroslav/HVV_HOME/res/images/down.gif")); // NOI18N
+        btnStopDtYearDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStopDtYearDownActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStopDtYearDown);
+        btnStopDtYearDown.setBounds(550, 900, 100, 20);
+
+        btnStopDtHourUp.setIcon(new javax.swing.ImageIcon("/home/yaroslav/HVV_HOME/res/images/up.gif")); // NOI18N
+        btnStopDtHourUp.setToolTipText("");
+        btnStopDtHourUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStopDtHourUpActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStopDtHourUp);
+        btnStopDtHourUp.setBounds(660, 840, 50, 20);
+
         lblStopHour.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
         lblStopHour.setText("20");
         lblStopHour.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
@@ -414,11 +620,30 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         getContentPane().add(lblStopHour);
         lblStopHour.setBounds(660, 860, 50, 40);
 
+        btnStopDtHourDown.setIcon(new javax.swing.ImageIcon("/home/yaroslav/HVV_HOME/res/images/down.gif")); // NOI18N
+        btnStopDtHourDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStopDtHourDownActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStopDtHourDown);
+        btnStopDtHourDown.setBounds(660, 900, 50, 20);
+
         lblDblPoint1.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
         lblDblPoint1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblDblPoint1.setText(":");
         getContentPane().add(lblDblPoint1);
         lblDblPoint1.setBounds(710, 860, 10, 40);
+
+        btnStopDtMinUp.setIcon(new javax.swing.ImageIcon("/home/yaroslav/HVV_HOME/res/images/up.gif")); // NOI18N
+        btnStopDtMinUp.setToolTipText("");
+        btnStopDtMinUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStopDtMinUpActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStopDtMinUp);
+        btnStopDtMinUp.setBounds(720, 840, 50, 20);
 
         lblStopMinutes.setFont(new java.awt.Font("Cantarell", 0, 36)); // NOI18N
         lblStopMinutes.setText("12");
@@ -430,6 +655,15 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         getContentPane().add(lblStopMinutes);
         lblStopMinutes.setBounds(720, 860, 50, 40);
 
+        btnStopDtMinDown.setIcon(new javax.swing.ImageIcon("/home/yaroslav/HVV_HOME/res/images/down.gif")); // NOI18N
+        btnStopDtMinDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStopDtMinDownActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnStopDtMinDown);
+        btnStopDtMinDown.setBounds(720, 900, 50, 20);
+
         btnLayout1x1.setText("1x1");
         btnLayout1x1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -437,7 +671,7 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnLayout1x1);
-        btnLayout1x1.setBounds(20, 920, 50, 40);
+        btnLayout1x1.setBounds(20, 930, 50, 40);
 
         btnLayout1x2.setText("1x2");
         btnLayout1x2.addActionListener(new java.awt.event.ActionListener() {
@@ -446,7 +680,7 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnLayout1x2);
-        btnLayout1x2.setBounds(80, 920, 50, 40);
+        btnLayout1x2.setBounds(80, 930, 50, 40);
 
         btnLayout2x1.setText("2x1");
         btnLayout2x1.addActionListener(new java.awt.event.ActionListener() {
@@ -455,7 +689,7 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnLayout2x1);
-        btnLayout2x1.setBounds(140, 920, 50, 40);
+        btnLayout2x1.setBounds(140, 930, 50, 40);
 
         btnLayout2x2.setText("2x2");
         btnLayout2x2.addActionListener(new java.awt.event.ActionListener() {
@@ -464,7 +698,31 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnLayout2x2);
-        btnLayout2x2.setBounds(200, 920, 50, 40);
+        btnLayout2x2.setBounds(200, 930, 50, 40);
+
+        lblNaNProcTitle.setText("Как интерпретировать NaN в данных");
+        getContentPane().add(lblNaNProcTitle);
+        lblNaNProcTitle.setBounds(370, 920, 380, 20);
+
+        buttonGroup1.add(radNaNProc3);
+        radNaNProc3.setText("как число");
+        getContentPane().add(radNaNProc3);
+        radNaNProc3.setBounds(630, 940, 100, 30);
+
+        buttonGroup1.add(radNaNProc1);
+        radNaNProc1.setSelected(true);
+        radNaNProc1.setText("Как и раньше");
+        getContentPane().add(radNaNProc1);
+        radNaNProc1.setBounds(370, 940, 113, 30);
+
+        buttonGroup1.add(radNaNProc2);
+        radNaNProc2.setText("пропускать");
+        getContentPane().add(radNaNProc2);
+        radNaNProc2.setBounds(500, 940, 125, 30);
+
+        edtNaNProc.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        getContentPane().add(edtNaNProc);
+        edtNaNProc.setBounds(730, 940, 80, 30);
 
         btnRefresh.setText("Отобразить");
         btnRefresh.addActionListener(new java.awt.event.ActionListener() {
@@ -483,32 +741,8 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         });
         getContentPane().add(btnExit);
         btnExit.setBounds(840, 920, 350, 40);
-
-        lblNaNProcTitle.setText("Как интерпретировать NaN в данных");
-        getContentPane().add(lblNaNProcTitle);
-        lblNaNProcTitle.setBounds(370, 920, 380, 20);
-
-        buttonGroup1.add(radNaNProc3);
-        radNaNProc3.setText("как число");
-        getContentPane().add(radNaNProc3);
-        radNaNProc3.setBounds(630, 940, 100, 30);
-
-        buttonGroup1.add(radNaNProc1);
-        radNaNProc1.setSelected(true);
-        radNaNProc1.setText("Как и раньше");
-        getContentPane().add(radNaNProc1);
-        radNaNProc1.setBounds(370, 940, 124, 30);
-
-        buttonGroup1.add(radNaNProc2);
-        radNaNProc2.setText("пропускать");
-        getContentPane().add(radNaNProc2);
-        radNaNProc2.setBounds(500, 940, 125, 30);
-
-        edtNaNProc.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        getContentPane().add(edtNaNProc);
-        edtNaNProc.setBounds(730, 940, 80, 30);
         getContentPane().add(jProgressBar1);
-        jProgressBar1.setBounds(0, 980, 1190, 14);
+        jProgressBar1.setBounds(0, 980, 1190, 20);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1080,6 +1314,86 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
         theApp.GetSettings().SaveSettings();
     }//GEN-LAST:event_formWindowClosed
 
+    private void btnStartDtYearUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartDtYearUpActionPerformed
+        m_gdtmStartDate.add( Calendar.YEAR, 1); updateDate();
+    }//GEN-LAST:event_btnStartDtYearUpActionPerformed
+
+    private void btnStartDtDayDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartDtDayDownActionPerformed
+        m_gdtmStartDate.add( Calendar.DAY_OF_MONTH, -1); updateDate();
+    }//GEN-LAST:event_btnStartDtDayDownActionPerformed
+
+    private void btnStartDtMinUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartDtMinUpActionPerformed
+        m_gdtmStartDate.add( Calendar.MINUTE, 1); updateDate();
+    }//GEN-LAST:event_btnStartDtMinUpActionPerformed
+
+    private void btnStartDtMonUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartDtMonUpActionPerformed
+        m_gdtmStartDate.add( Calendar.MONTH, 1); updateDate();
+    }//GEN-LAST:event_btnStartDtMonUpActionPerformed
+
+    private void btnStartDtHourUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartDtHourUpActionPerformed
+        m_gdtmStartDate.add( Calendar.HOUR, 1); updateDate();
+    }//GEN-LAST:event_btnStartDtHourUpActionPerformed
+
+    private void btnStartDtDayUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartDtDayUpActionPerformed
+        m_gdtmStartDate.add( Calendar.DAY_OF_MONTH, 1); updateDate();
+    }//GEN-LAST:event_btnStartDtDayUpActionPerformed
+
+    private void btnStartDtMinDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartDtMinDownActionPerformed
+        m_gdtmStartDate.add( Calendar.MINUTE, -1); updateDate();
+    }//GEN-LAST:event_btnStartDtMinDownActionPerformed
+
+    private void btnStartDtHourDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartDtHourDownActionPerformed
+        m_gdtmStartDate.add( Calendar.HOUR, -1); updateDate();
+    }//GEN-LAST:event_btnStartDtHourDownActionPerformed
+
+    private void btnStartDtYearDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartDtYearDownActionPerformed
+        m_gdtmStartDate.add( Calendar.YEAR, -1); updateDate();
+    }//GEN-LAST:event_btnStartDtYearDownActionPerformed
+
+    private void btnStartDtMonDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartDtMonDownActionPerformed
+        m_gdtmStartDate.add( Calendar.MONTH, -1); updateDate();
+    }//GEN-LAST:event_btnStartDtMonDownActionPerformed
+
+    private void btnStopDtHourDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStopDtHourDownActionPerformed
+        m_gdtmStopDate.add( Calendar.HOUR, -1); updateDate();
+    }//GEN-LAST:event_btnStopDtHourDownActionPerformed
+
+    private void btnStopDtMonDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStopDtMonDownActionPerformed
+        m_gdtmStopDate.add( Calendar.MONTH, -1); updateDate();
+    }//GEN-LAST:event_btnStopDtMonDownActionPerformed
+
+    private void btnStopDtYearDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStopDtYearDownActionPerformed
+        m_gdtmStopDate.add( Calendar.YEAR, -1); updateDate();
+    }//GEN-LAST:event_btnStopDtYearDownActionPerformed
+
+    private void btnStopDtMinDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStopDtMinDownActionPerformed
+        m_gdtmStopDate.add( Calendar.MINUTE, -1); updateDate();
+    }//GEN-LAST:event_btnStopDtMinDownActionPerformed
+
+    private void btnStopDtDayDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStopDtDayDownActionPerformed
+        m_gdtmStopDate.add( Calendar.DAY_OF_MONTH, -1); updateDate();
+    }//GEN-LAST:event_btnStopDtDayDownActionPerformed
+
+    private void btnStopDtHourUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStopDtHourUpActionPerformed
+        m_gdtmStopDate.add( Calendar.HOUR, 1); updateDate();
+    }//GEN-LAST:event_btnStopDtHourUpActionPerformed
+
+    private void btnStopDtMonUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStopDtMonUpActionPerformed
+        m_gdtmStopDate.add( Calendar.MONTH, 1); updateDate();
+    }//GEN-LAST:event_btnStopDtMonUpActionPerformed
+
+    private void btnStopDtYearUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStopDtYearUpActionPerformed
+        m_gdtmStopDate.add( Calendar.YEAR, 1); updateDate();
+    }//GEN-LAST:event_btnStopDtYearUpActionPerformed
+
+    private void btnStopDtMinUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStopDtMinUpActionPerformed
+        m_gdtmStopDate.add( Calendar.MINUTE, 1); updateDate();
+    }//GEN-LAST:event_btnStopDtMinUpActionPerformed
+
+    private void btnStopDtDayUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStopDtDayUpActionPerformed
+        m_gdtmStopDate.add( Calendar.DAY_OF_MONTH, 1); updateDate();
+    }//GEN-LAST:event_btnStopDtDayUpActionPerformed
+
     private void updateDate() {
         
         lblStartDay.setText( ( m_gdtmStartDate.get( Calendar.DAY_OF_MONTH) < 10 ? "0" : "") +
@@ -1161,6 +1475,26 @@ public class HVV_AV_MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnLayout2x1;
     private javax.swing.JButton btnLayout2x2;
     private javax.swing.JButton btnRefresh;
+    private javax.swing.JButton btnStartDtDayDown;
+    private javax.swing.JButton btnStartDtDayUp;
+    private javax.swing.JButton btnStartDtHourDown;
+    private javax.swing.JButton btnStartDtHourUp;
+    private javax.swing.JButton btnStartDtMinDown;
+    private javax.swing.JButton btnStartDtMinUp;
+    private javax.swing.JButton btnStartDtMonDown;
+    private javax.swing.JButton btnStartDtMonUp;
+    private javax.swing.JButton btnStartDtYearDown;
+    private javax.swing.JButton btnStartDtYearUp;
+    private javax.swing.JButton btnStopDtDayDown;
+    private javax.swing.JButton btnStopDtDayUp;
+    private javax.swing.JButton btnStopDtHourDown;
+    private javax.swing.JButton btnStopDtHourUp;
+    private javax.swing.JButton btnStopDtMinDown;
+    private javax.swing.JButton btnStopDtMinUp;
+    private javax.swing.JButton btnStopDtMonDown;
+    private javax.swing.JButton btnStopDtMonUp;
+    private javax.swing.JButton btnStopDtYearDown;
+    private javax.swing.JButton btnStopDtYearUp;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox cmbGraph1;
     private javax.swing.JComboBox cmbGraph2;
